@@ -44,9 +44,25 @@ map.on('load', () => {
         },
     });
 
+    // pedestrian collisions at intersections
+    map.addSource('pedcyc-collisions', {
+        type: 'geojson',
+        data: 'https://raw.githubusercontent.com/kshoester/group-project/main/data/motor-vehicle-collisions.geojson' //update
+    });
+    map.addLayer({
+        'id': 'ped-inter-collisions',
+        'type':'circle',
+        'source': 'pedcyc-collisions',
+        'paint': {
+            'circle-radius': 2,
+            'circle-color': 'red'
+        },
+        'filter': ['all',    
+            ['==', ['get', 'IMPACTYPE'], 'Pedestrian Collisions'],
+            ['==', ['get', 'LOCCOORD'], 'Intersection']], 
+    });
 
 });
-
 
 
 /*--------------------------------------------------------------------
