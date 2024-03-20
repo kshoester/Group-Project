@@ -127,23 +127,37 @@ map.on('load', () => {
         },
     });
 
-    // pedestrian collisions at intersections
+    // pedestrian collisions (2019)
     map.addSource('pedcyc-collisions-data', {
         type: 'geojson',
         data: collisionsgeojson
     });
     map.addLayer({
-        'id': 'ped-inter-collisions',
+        'id': 'ped-collisions',
         'type':'circle',
         'source': 'pedcyc-collisions-data',
         'paint': {
-            'circle-radius': 2,
+            'circle-radius': 3,
             'circle-color': 'red'
         },
         'filter': ['all',    
             ['==', ['get', 'IMPACTYPE'], 'Pedestrian Collisions'],
-            ['==', ['get', 'LOCCOORD'], 'Intersection']], 
+            ['==', ['get', 'YEAR'], 2019]], 
     }); 
+
+    // cyclist collisions (2019)
+    map.addLayer({
+        'id': 'cyc-collisions',
+        'type': 'circle',
+        'source': 'pedcyc-collisions-data',
+        'paint': {
+            'circle-radius': 3,
+            'circle-color': 'purple'
+        },
+        'filter': ['all',
+            ['==', ['get', 'IMPACTYPE'], 'Cyclist Collisions'],
+            ['==', ['get', 'YEAR'], 2019]],
+    });
 
 });
 
