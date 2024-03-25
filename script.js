@@ -376,12 +376,13 @@ map.on('load', function() {
 let nearestStationMarker = null;
 let nearestStationPopup = null;
 
-//
+//Use the Turf.js nearest point function in conjunction with the MapBox geocoder.
 geocoder.on('result', function(ev) {
     let queryResult = ev.result.geometry;
     let nearestBikeStation = turf.nearestPoint(queryResult, bikeShareStations);
     let stationName = nearestBikeStation.properties.name;
 
+    //Remove the markers / popups when the user changes the geocode address.
     if (nearestStationMarker) nearestStationMarker.remove();
     if (nearestStationPopup) nearestStationPopup.remove();
 
