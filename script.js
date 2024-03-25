@@ -22,8 +22,6 @@ const geocoder = new MapboxGeocoder({
     countries: 'ca',
 });
 
-document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
-
 /*--------------------------------------------------------------------
 GEOJSON POINT DATA
 --------------------------------------------------------------------*/
@@ -41,46 +39,46 @@ DATA VISUALIZATION
 --------------------------------------------------------------------*/
 map.on('load', () => {
 
-    // bounding box for all collisions
-    let collisionsbboxgeojson;
+    // // bounding box for all collisions
+    // let collisionsbboxgeojson;
 
-        let collisionsbbox = turf.envelope(collisionsgeojson);
+    //     let collisionsbbox = turf.envelope(collisionsgeojson);
 
-        collisionsbboxgeojson = {
-            'type': 'FeatureCollection',
-            'features': [collisionsbbox]
-        };
+    //     collisionsbboxgeojson = {
+    //         'type': 'FeatureCollection',
+    //         'features': [collisionsbbox]
+    //     };
 
-    map.addSource('collis-bbox', {
-        type: 'geojson',
-        data: collisionsbboxgeojson
-    });
-    map.addLayer({
-        'id': 'collis-bbox-layer',
-        'type': 'fill',
-        'source': 'collis-bbox',
-        'paint': {
-            'fill-color': 'red',
-            'fill-opacity': 0, //for now
-            'fill-outline-color': 'black'
-        }
-    });
+    // map.addSource('collis-bbox', {
+    //     type: 'geojson',
+    //     data: collisionsbboxgeojson
+    // });
+    // map.addLayer({
+    //     'id': 'collis-bbox-layer',
+    //     'type': 'fill',
+    //     'source': 'collis-bbox',
+    //     'paint': {
+    //         'fill-color': 'red',
+    //         'fill-opacity': 0, //for now
+    //         'fill-outline-color': 'black'
+    //     }
+    // });
 
-    // neighbourhood crime rates
-    map.addSource('crime-rates-data', {
-        type: 'geojson',
-        data: 'https://raw.githubusercontent.com/kshoester/group-project/main/data/neighbourhood-crime-rates.geojson' //update link
-    });
-    map.addLayer({
-        'id': 'crime-rates',
-        'type': 'fill',
-        'source': 'crime-rates-data',
-        'paint': {
-            'fill-color': 'yellow',
-            'fill-opacity': 0.1,
-            'fill-outline-color': 'black'
-        }
-    });
+    // // neighbourhood crime rates
+    // map.addSource('crime-rates-data', {
+    //     type: 'geojson',
+    //     data: 'https://raw.githubusercontent.com/kshoester/group-project/main/data/neighbourhood-crime-rates.geojson' //update link
+    // });
+    // map.addLayer({
+    //     'id': 'crime-rates',
+    //     'type': 'fill',
+    //     'source': 'crime-rates-data',
+    //     'paint': {
+    //         'fill-color': 'yellow',
+    //         'fill-opacity': 0.1,
+    //         'fill-outline-color': 'black'
+    //     }
+    // });
 
     // bike paths
     map.addSource('cycling-network-data', {
@@ -299,20 +297,49 @@ LEGEND
 
 /*--------------------------------------------------------------------
 GIS ANALYSIS - Ease of Active Transportation Index
+    INPUT:  
+    OUTPUT: 
+    GOAL:   
 --------------------------------------------------------------------*/
 
 
 
 /*--------------------------------------------------------------------
 GIS ANALYSIS - Schools Inside of a given Census Tract
+    INPUT:  User clicks on a census tract (ex: where the target school
+            is located).
+    OUTPUT: User is generated a list of all the schools in said census
+            tract.
+    GOAL:   Show which schools are affected by a given census tract of
+            the 'Ease of Active Transportation Index'. The 'Nearest
+            Bikeshare Station' will allow the user to input their 
+            address to recognize easily where either A) their school
+            is or B) where their home is or C) where landmarks or 
+            reference points are.
+    LIMITS: Census tract boundaries are, to some extent, arbitrary and
+            do not take into account the ways of life or just being on
+            the edge of a tract. Additionally, see the limits to the 
+            'Ease of Active Transportation Index'.
 --------------------------------------------------------------------*/
 
 
 
 /*--------------------------------------------------------------------
 GIS ANALYSIS - Nearest Bikeshare Station
+    INPUT:  User inputs desired address (ex: home or school)
+    OUTPUT: User receives the nearest Toronto bikeshare station to 
+            the specified location. 
+    GOAL:   Increased awareness and usage of bikeshare program.
+    LIMITS: There are many areas in the city without any convinient
+            bikeshare coverage, notably North York, Etobicoke, and 
+            Scarborough.
 --------------------------------------------------------------------*/
 
+//Geocoder for user to input address. 
+document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
+
+//NOTE: From here to comment ***** will be placed in the above sections for fetching / adding layers. It is here for programming ease.
+//Fetch bike share stations GeoJSON from GitHub folder. Converted from JSON (See Python script).
 let bikeShareStations;
 fetch('https://raw.githubusercontent.com/kshoester/Group-Project/Alex/stations.geojson')
     .then(response => response.json())
@@ -321,11 +348,12 @@ fetch('https://raw.githubusercontent.com/kshoester/Group-Project/Alex/stations.g
         bikeShareStations = response;
     });
 
+//Bike share stations layer. Larger as you zoom into the map (vice versa).
 map.on('load', function() {
     map.addSource('bikeShareStationsData', {
         type: 'geojson',
         data: bikeShareStations
-    })
+    });
     map.addLayer({
         id: 'bikeShareStations',
         type: 'circle',
@@ -341,4 +369,48 @@ map.on('load', function() {
             'circle-color': 'black'
         }
     });
+});
+//*****
+
+//Popup variables to default at null.
+let nearestStationMarker = null;
+let nearestStationPopup = null;
+
+//
+geocoder.on('result', function(ev) {
+    let queryResult = ev.result.geometry;
+    let nearestBikeStation = turf.nearestPoint(queryResult, bikeShareStations);
+    let stationName = nearestBikeStation.properties.name;
+
+    if (nearestStationMarker) nearestStationMarker.remove();
+    if (nearestStationPopup) nearestStationPopup.remove();
+
+    //Variables for popup. In depth comments further down.
+    nearestStationMarker = new mapboxgl.Marker()
+        .setLngLat(nearestBikeStation.geometry.coordinates)
+        .addTo(map);
+    nearestStationPopup = new mapboxgl.Popup({
+        closeButton: false
+    })
+    .setHTML('<h4>Nearest bikeshare station: </h4><p>' + stationName + '</p>')
+
+    //Zoom map to nearest bike station on address input
+    map.flyTo({
+        center: nearestBikeStation.geometry.coordinates,
+        zoom: 14
+    });
+});
+
+//Popup window for the nearest bike station. Made it so that if the user clicks within a 40m range the popup will appear.
+//Easier to use, especially when zoomed out or on a trackpad. Popup closes when A) a new address is inputed or B) user clicks anywhere else on the map.
+map.on('click', function(e) {
+    if (!nearestStationMarker) return;
+    let clickPoint = turf.point([e.lngLat.lng, e.lngLat.lat]);//Where user clicked
+    let stationPoint = turf.point(nearestStationMarker.getLngLat().toArray());//Where the nearest station is Lat/Lon
+    let stationClickRegion = turf.distance(clickPoint, stationPoint, {units: 'meters'});//Clickable region for station
+
+    //40m range. Can be adjusted easily for larger / smaller ranges. 
+    if (stationClickRegion <= 40) {
+        nearestStationPopup.setLngLat(nearestStationMarker.getLngLat()).addTo(map);
+    }
 });
