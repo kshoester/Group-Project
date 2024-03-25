@@ -26,12 +26,20 @@ const geocoder = new MapboxGeocoder({
 GEOJSON POINT DATA
 --------------------------------------------------------------------*/
 let collisionsgeojson;
+let TDSBSchoolsData;
 
 fetch('https://raw.githubusercontent.com/kshoester/group-project/main/data/motor-vehicle-collisions.geojson') //update
     .then(response => response.json())
     .then(response => {
         console.log(response);
         collisionsgeojson = response;
+    });
+
+fetch('https://raw.githubusercontent.com/kshoester/Group-Project/main/data/tdsb-locations.geojson') //update
+    .then(response => response.json())
+    .then(response => {
+        console.log(response);
+        TDSBSchoolsData = response;
     });
 
 /*--------------------------------------------------------------------
@@ -64,21 +72,21 @@ map.on('load', () => {
     //     }
     // });
 
-    // // neighbourhood crime rates
-    // map.addSource('crime-rates-data', {
-    //     type: 'geojson',
-    //     data: 'https://raw.githubusercontent.com/kshoester/group-project/main/data/neighbourhood-crime-rates.geojson' //update link
-    // });
-    // map.addLayer({
-    //     'id': 'crime-rates',
-    //     'type': 'fill',
-    //     'source': 'crime-rates-data',
-    //     'paint': {
-    //         'fill-color': 'yellow',
-    //         'fill-opacity': 0.1,
-    //         'fill-outline-color': 'black'
-    //     }
-    // });
+    // neighbourhood crime rates
+    map.addSource('crime-rates-data', {
+        type: 'geojson',
+        data: 'https://raw.githubusercontent.com/kshoester/group-project/main/data/neighbourhood-crime-rates.geojson' //update link
+    });
+    map.addLayer({
+        'id': 'crime-rates',
+        'type': 'fill',
+        'source': 'crime-rates-data',
+        'paint': {
+            'fill-color': 'yellow',
+            'fill-opacity': 0.1,
+            'fill-outline-color': 'black'
+        }
+    });
 
     // bike paths
     map.addSource('cycling-network-data', {
@@ -113,7 +121,7 @@ map.on('load', () => {
     // tdsb schools
     map.addSource('tdsb-data', {
         type: 'geojson',
-        data: 'https://raw.githubusercontent.com/kshoester/group-project/main/data/tdsb-locations.geojson' //update link
+        data: TDSBSchoolsData
     });
     map.addLayer({
         'id': 'tdsb-schools',
@@ -322,6 +330,64 @@ GIS ANALYSIS - Schools Inside of a given Census Tract
             'Ease of Active Transportation Index'.
 --------------------------------------------------------------------*/
 
+//Using the 'Neighborhood crime rates' layer as a polygon test file.
+// map.on('click', 'crime-rates', function(e) {
+//     let selectedCT = e.features[0];
+//     let hoodID = e.features[0].properties._id;
+//     map.setPaintProperty('crime-rates', 'fill-color', [
+//         'match', ['get', '_id'], hoodID, '#f00', '#fff'
+//     ]);
+
+//     //Find the schools inside the select CT. 
+//     let schoolsInCT = turf.pointsWithinPolygon(TDSBSchoolsData, turf.polygon(selectedCT.geometry.coordinates));
+//     selectedSchools(schoolsInCT);
+
+//     //Highlight TDSB locations within selected CT.
+//     function selectedSchools(schoolsInCT) {
+//         map.setFilter('tdsb-schools', ['in', 'SCH_NAME', ...schoolsInCT.features.map(f => f.properties.SCH_NAME)]);
+//         let schoolNames = schoolsInCT.features.map(f => f.properties.SCH_NAME);
+//         displaySchoolList(schoolNames);
+//     }
+
+//     //Display the schools in the CT. WIP needs HTML script to function - will produce error in console.
+//     function displaySchoolList(schoolNames) {
+//         var listElement = document.getElementById('school-list');
+//         listElement.innerHTML = '';
+//         schoolNames.forEach(name => {
+//             var listItem = document.createElement('li');
+//             listItem.textContent = name;
+//             listElement.appendChild(listItem);
+//         });
+//     }
+// });
+
+map.on('click', 'crime-rates', function(e) {
+    let selectedCT = e.features[0];
+    let hoodID = e.features[0].properties._id;
+
+    map.setPaintProperty('crime-rates', 'fill-color', [
+        'match', ['get', '_id'], hoodID, '#f00', '#fff'
+    ]);
+
+    let schoolsInCT = turf.pointsWithinPolygon(TDSBSchoolsData, selectedCT);
+
+    console.log("Schools within the selected census tract:");
+    schoolsInCT.features.forEach(function(school) {
+        let schoolName = school.properties.SCH_NAME || school.properties.PLACE_NAME;
+        if (schoolName) {
+            console.log(schoolName);
+        } else {
+            console.log("A feature without a SCH_NAME or PLACE_NAME property was found:", school);
+        }
+
+    console.log("Selected Census Tract:", selectedCT);
+    console.log("Schools Data Sample:", TDSBSchoolsData.features.slice(0, 1));
+    console.log("Schools within CT:", schoolsInCT.features.slice(0, 5));
+    });
+});
+
+
+
 
 
 /*--------------------------------------------------------------------
@@ -414,4 +480,4 @@ map.on('click', function(e) {
     if (stationClickRegion <= 40) {
         nearestStationPopup.setLngLat(nearestStationMarker.getLngLat()).addTo(map);
     }
-});
+}); 
