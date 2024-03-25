@@ -313,3 +313,32 @@ GIS ANALYSIS - Schools Inside of a given Census Tract
 GIS ANALYSIS - Nearest Bikeshare Station
 --------------------------------------------------------------------*/
 
+let bikeShareStations;
+fetch('https://raw.githubusercontent.com/kshoester/Group-Project/Alex/stations.geojson')
+    .then(response => response.json())
+    .then(response => {
+        console.log(response);
+        bikeShareStations = response;
+    });
+
+map.on('load', function() {
+    map.addSource('bikeShareStationsData', {
+        type: 'geojson',
+        data: bikeShareStations
+    })
+    map.addLayer({
+        id: 'bikeShareStations',
+        type: 'circle',
+        source: 'bikeShareStationsData',
+        paint: {
+            'circle-radius': [
+                "interpolate",
+                ["linear"],
+                ["zoom"],
+                10, 1,
+                15, 10
+            ],
+            'circle-color': 'black'
+        }
+    });
+});
