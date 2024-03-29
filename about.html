@@ -25,32 +25,43 @@
 
 <body>
     <!-- NAV BAR -->
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="index.html">Home</a>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <!-- <a class="navbar-brand" href="index.html">Home</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link" target="blank" href="about.html">Ease of Transportation Index</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Resources
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" target="blank" href="https://www.toronto.ca/wp-content/uploads/2018/11/917a-TS_VisionZero-SchoolChildren-Brochure.pdf">VisionZero Safety Guide</a></li>
-              <li><a class="dropdown-item" target="blank" href="http://guide.saferoutesinfo.org/">SafeRoutesToSchool Guide</a></li>
-              <li><a class="dropdown-item" target="blank" href="https://open.toronto.ca/dataset/cycling-network/">Toronto's Cycling Network Dataset</a></li>
-              <li><a class="dropdown-item" target="blank" href="https://open.toronto.ca/dataset/pedestrian-network/">Toronto's Pedestrian Network Dataset</a></li>
-             </ul>
-            </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+      </button> -->
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" target="blank" href="about.html">Ease of Transportation Index</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Resources
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" target="blank"
+                                    href="https://www.toronto.ca/wp-content/uploads/2018/11/917a-TS_VisionZero-SchoolChildren-Brochure.pdf">VisionZero
+                                    Safety Guide</a></li>
+                            <li><a class="dropdown-item" target="blank"
+                                    href="http://guide.saferoutesinfo.org/">SafeRoutesToSchool Guide</a></li>
+                            <li><a class="dropdown-item" target="blank"
+                                    href="https://open.toronto.ca/dataset/cycling-network/">Toronto's Cycling Network
+                                    Dataset</a></li>
+                            <li><a class="dropdown-item" target="blank"
+                                    href="https://open.toronto.ca/dataset/pedestrian-network/">Toronto's Pedestrian
+                                    Network Dataset</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
     <!--Bootstrap Cards-->
     <div>
         <div class="header">
@@ -66,54 +77,62 @@
                             <center>Number of Collisions</center>
                         </div>
                         <div class="card-body">
-                            <p class="card-text">description of collision data</p>
-                        </div>
-                        <div class="card-footer"><a
+                            <p class="card-text">The number of collisions variable was created to determine the number
+                                of
+                                motor vehicle incidents that occurred with pedestrians and cyclists.
+                                This variable used data from the Motor Vehicle Collisions dataset,
+                                which includes all traffic collisions events where a person was either Killed or
+                                Seriously Injured (KSI) from 2006 to 2021.
+                            </p>
+                            <div class="card-footer"> For more information <a
                                 href="https://open.toronto.ca/dataset/motor-vehicle-collisions-involving-killed-or-seriously-injured-persons/"
-                                target="_blank" class="card-link">Link to data source</a></div>
+                                target="_blank" class="card-link">click here</a></div>
                     </div>
-                </div>
-                <div class="col">
-                    <div class="card" style="width: 18rem;">
-                        <div class="card-header">
-                            <center>Walk Score</center>
                         </div>
-                        <div class="card-body">
-                            <p class="card-text"> Measures the walkability of a
-                                location based on urban morphology, programs or land use, population and intersection density. <br> <br>
-                                Score from 0–100: <br>
-                                0–24 Heavily car-dependent <br>
-                                25–49 Car-dependent <br>
-                                50–69 Somewhat walkable <br>
-                                70–89 Very walkable <br>
-                                90–100 Walkers paradise <br>
+                    </div>
+                    <div class="col">
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-header">
+                                <center>Walk Score</center>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text"> Measures the walkability of a
+                                    location based on urban morphology, programs or land use, population and
+                                    intersection density. <br> <br>
+                                    Score from 0–100: <br>
+                                    0–24 Heavily car-dependent <br>
+                                    25–49 Car-dependent <br>
+                                    50–69 Somewhat walkable <br>
+                                    70–89 Very walkable <br>
+                                    90–100 Walkers paradise <br>
                                 </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-header">
+                                <!-- still need link to dataset and a description of bike theft rate variable -->
+                                <center>Bike Theft Rate</center>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">description of bike theft rate</p>
+                            </div>
+                            <div class="card-footer">For more information <a href="#" target="_blank" class="card-link">click here</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-header">
+                                <center>Average Speed Limit</center>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">The average speed limit variable was calculated to determine the safety of Toronto's streets based on user discretion.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col">
-                    <div class="card" style="width: 18rem;">
-                        <div class="card-header">
-                            <center>Bike Theft Rate</center>
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text">description of bike theft rate</p>
-                        </div>
-                        <div class="card-footer"><a href="#" target="_blank" class="card-link">Link to data source</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card" style="width: 18rem;">
-                        <div class="card-header">
-                            <center>Average Speed Limit</center>
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text">might not need this card but could still add it</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </center>
         <div class="image">
             <center>
