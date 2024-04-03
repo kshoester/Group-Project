@@ -76,3 +76,23 @@ label {
 form {
     padding-bottom: 20px;
 }
+
+#deselectHoods {
+    position: absolute; 
+    z-index: 1000; 
+    top: 450px; 
+    left: 20px; 
+    background-color: white; 
+    padding: 10px;
+    border: none; 
+    cursor: pointer; 
+    border-radius: 5px; 
+    font-size: 16px; 
+}
+
+/* .mapboxgl-ctrl-directions {
+    position: absolute;
+    top: 500px;
+    left: 10px;
+    z-index: 1000;
+} */

@@ -22,6 +22,12 @@ const geocoder = new MapboxGeocoder({
     countries: 'ca',
 });
 
+// let directions = new MapboxDirections({
+//     accessToken: mapboxgl.accessToken,
+//     unit: 'metric',
+// });
+// map.addControl(directions, 'top-right');
+
 /*--------------------------------------------------------------------
 GEOJSON POINT DATA
 --------------------------------------------------------------------*/
@@ -60,46 +66,32 @@ fetch('https://raw.githubusercontent.com/kshoester/Group-Project/main/data/tdsb-
 DATA VISUALIZATION
 --------------------------------------------------------------------*/
 map.on('load', () => {
-
-    // // bounding box for all collisions
-    // let collisionsbboxgeojson;
-
-    //     let collisionsbbox = turf.envelope(collisionsgeojson);
-
-    //     collisionsbboxgeojson = {
-    //         'type': 'FeatureCollection',
-    //         'features': [collisionsbbox]
-    //     };
-
-    // map.addSource('collis-bbox', {
-    //     type: 'geojson',
-    //     data: collisionsbboxgeojson
-    // });
-    // map.addLayer({
-    //     'id': 'collis-bbox-layer',
-    //     'type': 'fill',
-    //     'source': 'collis-bbox',
-    //     'paint': {
-    //         'fill-color': 'red',
-    //         'fill-opacity': 0, //for now
-    //         'fill-outline-color': 'black'
-    //     }
-    // });
-
-    // neighbourhood crime rates
+    // neighbourhood crime rates --> 2019 bike thefts
     map.addSource('crime-rates-data', {
         type: 'geojson',
-        data: 'https://raw.githubusercontent.com/kshoester/group-project/main/data/neighbourhood-crime-rates.geojson' //update link
+        data: 'https://raw.githubusercontent.com/kshoester/group-project/main/data/neighbourhood-crime-rates.geojson' // Update link if necessary
     });
     map.addLayer({
         'id': 'crime-rates',
         'type': 'fill',
         'source': 'crime-rates-data',
         'paint': {
-            'fill-color': 'yellow',
-            'fill-opacity': 0.1,
+            'fill-color': [
+                'interpolate',
+                ['linear'],
+                ['get', 'BIKETHEFT_2019'],
+                0, '#FFEDA0',
+                10, '#FED976',
+                20, '#FEB24C',
+                30, '#FD8D3C',
+                40, '#FC4E2A',
+                50, '#E31A1C',
+                60, '#BD0026',
+                70, '#800026'
+            ],
+            'fill-opacity': 0.75,
             'fill-outline-color': 'black'
-        }
+        },
     });
 
     // bike paths
@@ -266,7 +258,33 @@ LEGEND
 
 
 
+/*--------------------------------------------------------------------
+LAYER TOGGLES
+--------------------------------------------------------------------*/
+document.getElementById('deselectHoods').addEventListener('click', function() {
+    map.setPaintProperty('crime-rates', 'fill-color', [
+        'interpolate',
+        ['linear'],
+        ['get', 'BIKETHEFT_2019'],
+        0, '#FFEDA0',
+        10, '#FED976',
+        20, '#FEB24C',
+        30, '#FD8D3C',
+        40, '#FC4E2A',
+        50, '#E31A1C',
+        60, '#BD0026',
+        70, '#800026'
+    ], 'fill-opacity', 1, 'fill-outline-color', 'black');
+    map.setFilter('tdsb-highlight', ['==', ['get', 'SCH_NAME'], '']);
 
+    let popups = document.getElementsByClassName('mapboxgl-popup');
+    if (popups.length) {
+        for (let i = popups.length - 1; i >= 0; i--) {
+            popups[i].remove();
+        }
+    }
+    console.clear();
+});
 
 
 
@@ -373,15 +391,15 @@ map.on('click', 'crime-rates', function(e) {
     console.log("Schools within the selected census tract:", schoolsInCT.join(", "));
 
     if (schoolsInCT.length > 0) {
-        // Use the 'match' operator for dynamic value checks against an array of schools
         let filter = ['match', ['get', 'SCH_NAME'], schoolsInCT, true, false];
         map.setFilter('tdsb-highlight', filter);
     } else {
-        // Handle the case when no schools are found within the selected CT
         map.setFilter('tdsb-highlight', ['==', ['get', 'SCH_NAME'], '']);
     }
 
-    let popupContent = `<strong>Census Tract:</strong> ${selectedCT.properties.AREA_NAME}<br><strong>Schools:</strong> ${schoolsInCT.join(', ')}`;
+    let popupContent = `<strong>Census Tract:</strong> ${selectedCT.properties.AREA_NAME}
+        <br><strong>Bike Thefts (2019):</strong> ${selectedCT.properties.BIKETHEFT_2019}
+        <br><strong>Schools:</strong> ${schoolsInCT.join(', ')}`;
     new mapboxgl.Popup()
         .setLngLat(e.lngLat)
         .setHTML(popupContent)
