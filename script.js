@@ -42,6 +42,20 @@ fetch('https://raw.githubusercontent.com/kshoester/Group-Project/main/data/tdsb-
         TDSBSchoolsData = response;
     });
 
+// TDSBSchoolsData.features = TDSBSchoolsData.features.map(feature => {
+//     if (feature.geometry.type === "MultiPoint" && feature.geometry.coordinates.length === 1) {
+//         return {
+//             ...feature,
+//             geometry: {
+//                 type: "Point",
+//                 coordinates: feature.geometry.coordinates[0]
+//             }
+//         };
+//     }
+//     return feature;
+// });
+    
+
 /*--------------------------------------------------------------------
 DATA VISUALIZATION
 --------------------------------------------------------------------*/
@@ -131,6 +145,18 @@ map.on('load', () => {
             'circle-radius': 3,
             'circle-color': 'blue'
         },
+    });
+
+    // tdsb highlight layer
+    map.addLayer({
+        'id': 'tdsb-highlight',
+        'type': 'circle',
+        'source': 'tdsb-data',
+        'paint': {
+            'circle-radius': 10,
+            'circle-color': '#FFFF00'
+        },
+        'filter': ['in', ['get', 'SCH_NAME'], '']
     });
 
     // pedestrian collisions (2019)
@@ -330,37 +356,6 @@ GIS ANALYSIS - Schools Inside of a given Census Tract
             'Ease of Active Transportation Index'.
 --------------------------------------------------------------------*/
 
-//Using the 'Neighborhood crime rates' layer as a polygon test file.
-// map.on('click', 'crime-rates', function(e) {
-//     let selectedCT = e.features[0];
-//     let hoodID = e.features[0].properties._id;
-//     map.setPaintProperty('crime-rates', 'fill-color', [
-//         'match', ['get', '_id'], hoodID, '#f00', '#fff'
-//     ]);
-
-//     //Find the schools inside the select CT. 
-//     let schoolsInCT = turf.pointsWithinPolygon(TDSBSchoolsData, turf.polygon(selectedCT.geometry.coordinates));
-//     selectedSchools(schoolsInCT);
-
-//     //Highlight TDSB locations within selected CT.
-//     function selectedSchools(schoolsInCT) {
-//         map.setFilter('tdsb-schools', ['in', 'SCH_NAME', ...schoolsInCT.features.map(f => f.properties.SCH_NAME)]);
-//         let schoolNames = schoolsInCT.features.map(f => f.properties.SCH_NAME);
-//         displaySchoolList(schoolNames);
-//     }
-
-//     //Display the schools in the CT. WIP needs HTML script to function - will produce error in console.
-//     function displaySchoolList(schoolNames) {
-//         var listElement = document.getElementById('school-list');
-//         listElement.innerHTML = '';
-//         schoolNames.forEach(name => {
-//             var listItem = document.createElement('li');
-//             listItem.textContent = name;
-//             listElement.appendChild(listItem);
-//         });
-//     }
-// });
-
 map.on('click', 'crime-rates', function(e) {
     let selectedCT = e.features[0];
     let hoodID = e.features[0].properties._id;
@@ -369,21 +364,28 @@ map.on('click', 'crime-rates', function(e) {
         'match', ['get', '_id'], hoodID, '#f00', '#fff'
     ]);
 
-    let schoolsInCT = turf.pointsWithinPolygon(TDSBSchoolsData, selectedCT);
-
-    console.log("Schools within the selected census tract:");
-    schoolsInCT.features.forEach(function(school) {
-        let schoolName = school.properties.SCH_NAME || school.properties.PLACE_NAME;
-        if (schoolName) {
-            console.log(schoolName);
-        } else {
-            console.log("A feature without a SCH_NAME or PLACE_NAME property was found:", school);
+    let schoolsInCT = [];
+    TDSBSchoolsData.features.forEach(school => {
+        if (turf.booleanPointInPolygon(turf.point(school.geometry.coordinates[0]), selectedCT)) {
+            schoolsInCT.push(school.properties.SCH_NAME || school.properties.PLACE_NAME);
         }
-
-    console.log("Selected Census Tract:", selectedCT);
-    console.log("Schools Data Sample:", TDSBSchoolsData.features.slice(0, 1));
-    console.log("Schools within CT:", schoolsInCT.features.slice(0, 5));
     });
+    console.log("Schools within the selected census tract:", schoolsInCT.join(", "));
+
+    if (schoolsInCT.length > 0) {
+        // Use the 'match' operator for dynamic value checks against an array of schools
+        let filter = ['match', ['get', 'SCH_NAME'], schoolsInCT, true, false];
+        map.setFilter('tdsb-highlight', filter);
+    } else {
+        // Handle the case when no schools are found within the selected CT
+        map.setFilter('tdsb-highlight', ['==', ['get', 'SCH_NAME'], '']);
+    }
+
+    let popupContent = `<strong>Census Tract:</strong> ${selectedCT.properties.AREA_NAME}<br><strong>Schools:</strong> ${schoolsInCT.join(', ')}`;
+    new mapboxgl.Popup()
+        .setLngLat(e.lngLat)
+        .setHTML(popupContent)
+        .addTo(map);
 });
 
 
