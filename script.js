@@ -245,25 +245,6 @@ document.getElementById('returnbutton').addEventListener('click', () => {
 /*--------------------------------------------------------------------
 LEGEND
 --------------------------------------------------------------------*/
-const legend = document.getElementById('legend');
-
-legendlabels.forEach((label, i) => {
-    const colour = legendcolours[i];
-
-    const item = document.createElement('div');
-    const key = document.createElement('span');
-
-    key.className = 'legend-key';
-    key.style.backgroundColor = colour;
-
-    const value = document.createElement('span');
-    value.innerHTML = `${label}`;
-
-    item.appendChild(key);
-    item.appendChild(value);
-
-    legend.appendChild(item);
-});
 
 
 
