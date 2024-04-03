@@ -34,7 +34,7 @@
 .map-data-container {
     position: relative;
     font: 14px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-    background: rgba(255, 255, 255, 0.8);
+    background-color: #fff;
     width: 260px;
     top: 0;
     left: 10px;
@@ -50,7 +50,7 @@
     border-radius: 3px;
     bottom: 0;
     margin-bottom: 30px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); 
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
     padding: 10px;
     right: 10px;
@@ -63,8 +63,8 @@
 
 .legend-key {
     display: inline-block;
-    border-radius: 50%; 
-    height: 10px; 
+    border-radius: 50%;
+    height: 10px;
     width: 10px;
     margin-right: 5px;
 }
@@ -124,4 +124,23 @@ form {
     background-color: lightgrey;
     height: 520px;
     border: 2px solid black;
+}
+
+.header{
+    height: 100px;
+}
+
+.image{
+    bottom: 0;
+}
+
+.card {
+    background-color: rgb(153, 206, 214);
+    margin-right: 5px;
+}
+.card-header {
+    font: 22px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+.card-text {
+    font: 16px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
