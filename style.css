@@ -43,22 +43,110 @@
     overflow: visible;
 }
 
+
+#deselectHoods {
+    position: absolute;
+    z-index: 1000;
+    top: 350px;
+    left: 10px;
+    background-color: white;
+    padding: 2px;
+    border: 2px solid black;
+    cursor: pointer;
+    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+#returnToToronto {
+    left: 10px;
+    background-color: white;
+    padding: 2px;
+    border: 2px solid black;
+    cursor: pointer;
+    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+/* .mapboxgl-ctrl-directions {
+    position: absolute;
+    top: 500px;
+    left: 10px;
+    z-index: 1000;
+} */
+
+.opacity-slider-container {
+    user-select: none;
+    position: absolute;
+    top: 390px;
+    left: 10px;
+    z-index: 1000;
+    background-color: white;
+    padding: 2px;
+    border: 2px solid black;
+    cursor: pointer;
+    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+.sidebar {
+    width: 250px;
+    position: absolute;
+    z-index: 9999;
+    top: 60px;
+    left: 10px;
+    overflow-x: hidden;
+    background-color: lightgrey;
+    height: 470px;
+    border: 2px solid black;
+    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+.header {
+    height: 100px;
+}
+
+.image {
+    bottom: 0;
+}
+
+.card {
+    background-color: rgb(153, 206, 214);
+    margin-right: 5px;
+}
+
+.card-header {
+    font: 22px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+.card-text {
+    font: 16px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
 .legend {
     position: absolute;
-    display: none;
-    background-color: #fff;
-    border-radius: 3px;
+    background-color: #D3D3D3;
+    border: 2px solid black;
     bottom: 0;
     margin-bottom: 30px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
     padding: 10px;
     right: 10px;
-    z-index: 1;
+    z-index: 10200;
+    width: 250px;
 }
 
 .legend h4 {
     margin: 0 0 10px;
+}
+
+.legend h8 {
+    margin: 0 0 7px;
+}
+
+.legend div span {
+    display: inline-block;
+    border-radius: 50%;
+    height: 10px;
+    width: 10px;
+    margin-right: 5px;
 }
 
 .legend-key {
@@ -77,95 +165,4 @@ label {
 form {
     padding-bottom: 20px;
     left: 10px;
-}
-
-#deselectHoods {
-    position: absolute; 
-    z-index: 1000; 
-    top: 410px; 
-    left: 10px; 
-    background-color: white; 
-    padding: 2px;
-    border: none; 
-    cursor: pointer; 
-    border-radius: 5px; 
-    font-size: 16px; 
-}
-
-/* .mapboxgl-ctrl-directions {
-    position: absolute;
-    top: 500px;
-    left: 10px;
-    z-index: 1000;
-} */
-
-.opacity-slider-container {
-    user-select: none;
-    position: absolute;
-    top: 450px; 
-    left: 10px;
-    z-index: 1000;
-    background-color: white; 
-    padding: 2px;
-    border: none; 
-    cursor: pointer; 
-    border-radius: 5px; 
-    font-size: 16px; 
-}
-
-.sidebar {
-    height: 100%;
-    width: 250px;
-    position: absolute;
-    z-index: 9999;
-    top: 60px;
-    left: 10px;
-    overflow-x: hidden;
-    background-color: lightgrey;
-    height: 520px;
-    border: 2px solid black;
-}
-
-.header{
-    height: 100px;
-}
-
-.image{
-    bottom: 0;
-}
-
-.card {
-    background-color: rgb(153, 206, 214);
-    margin-right: 5px;
-}
-.card-header {
-    font: 22px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-}
-.card-text {
-    font: 16px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-}
-
-.legend {
-    position: absolute;
-    background-color: #D3D3D3;
-    border-radius: 3px;
-    bottom: 0;
-    margin-bottom: 30px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-    padding: 10px;
-    right: 10px;
-    z-index: 10200;
-}
-
-.legend h4{
-    margin: 0 0 10px;
-}
-
-.legend div span {
-    display: inline-block;
-    border-radius: 50%;
-    height: 10px;
-    width: 10px;
-    margin-right: 5px;
 }
