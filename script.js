@@ -3,10 +3,10 @@ INITIALIZE MAP
 --------------------------------------------------------------------*/
 mapboxgl.accessToken = 'pk.eyJ1Ijoia3Nob2VzdGVyIiwiYSI6ImNsdG9jOXN3djBoMnYyaW1zYnRuZ3VkYzYifQ.Z976OphNTmOc_8gG7O6khQ';
 
-const map = new mapboxgl.Map({ 
+const map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/kshoester/cltsd7k7400ct01qs61u02utn', // monochrome style with toronto CTs
-    center: [-79.39, 43.66], 
+    center: [-79.39, 43.66],
     zoom: 12,
 });
 
@@ -139,7 +139,7 @@ map.on('load', () => {
     });
     map.addLayer({
         'id': 'ped-collisions',
-        'type':'circle',
+        'type': 'circle',
         'source': 'pedcyc-collisions-data',
         'paint': {
             'circle-radius': [
@@ -151,10 +151,10 @@ map.on('load', () => {
             ],
             'circle-color': 'red'
         },
-        'filter': ['all',    
+        'filter': ['all',
             ['==', ['get', 'IMPACTYPE'], 'Pedestrian Collisions'],
-            ['==', ['get', 'YEAR'], 2019]], 
-    }); 
+            ['==', ['get', 'YEAR'], 2019]],
+    });
 
     // cyclist collisions (2019)
     map.addLayer({
@@ -176,7 +176,7 @@ map.on('load', () => {
             ['==', ['get', 'YEAR'], 2019]],
     });
 
-    document.getElementById('opacity-slider').addEventListener('input', function(e) {
+    document.getElementById('opacity-slider').addEventListener('input', function (e) {
         let layerOpacity = e.target.value;
         map.setPaintProperty('crime-rates', 'fill-opacity', parseFloat(layerOpacity));
     });
@@ -211,25 +211,24 @@ INTERACTIVITY EVENTS
 // dropdown selection of schools by municipality
 let munivalue;
 
-document.getElementById("munifieldset").addEventListener('change',(e) => {   
+document.getElementById("munifieldset").addEventListener('change', (e) => {
     munivalue = document.getElementById('muni').value;
 
-    console.log(munivalue); 
+    console.log(munivalue);
 
     if (munivalue == 'All') {
         map.setFilter(
             'tdsb-schools',
-            ['has', '_id'] 
+            ['has', '_id']
         );
     } else {
         map.setFilter(
             'tdsb-schools',
-            ['==', ['get', 'MUNICIPALITY'], munivalue] 
+            ['==', ['get', 'MUNICIPALITY'], munivalue]
         );
     }
 
 });
-
 
 
 // return to full extent
@@ -243,22 +242,35 @@ document.getElementById('returnbutton').addEventListener('click', () => {
 
 
 
-
-
-
-
 /*--------------------------------------------------------------------
 LEGEND
 --------------------------------------------------------------------*/
+const legend = document.getElementById('legend');
 
+legendlabels.forEach((label, i) => {
+    const colour = legendcolours[i];
 
+    const item = document.createElement('div');
+    const key = document.createElement('span');
+
+    key.className = 'legend-key';
+    key.style.backgroundColor = colour;
+
+    const value = document.createElement('span');
+    value.innerHTML = `${label}`;
+
+    item.appendChild(key);
+    item.appendChild(value);
+
+    legend.appendChild(item);
+});
 
 
 
 /*--------------------------------------------------------------------
 LAYER TOGGLES
 --------------------------------------------------------------------*/
-document.getElementById('deselectHoods').addEventListener('click', function() {
+document.getElementById('deselectHoods').addEventListener('click', function () {
     map.setPaintProperty('crime-rates', 'fill-color', [
         'interpolate',
         ['linear'],
@@ -281,59 +293,6 @@ document.getElementById('deselectHoods').addEventListener('click', function() {
     }
     console.clear();
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -364,7 +323,7 @@ GIS ANALYSIS - Schools Inside of a given Census Tract
             'Ease of Active Transportation Index'.
 --------------------------------------------------------------------*/
 
-map.on('click', 'crime-rates', function(e) {
+map.on('click', 'crime-rates', function (e) {
     let selectedCT = e.features[0];
     let hoodID = e.features[0].properties._id;
 
@@ -397,9 +356,6 @@ map.on('click', 'crime-rates', function(e) {
 });
 
 
-
-
-
 /*--------------------------------------------------------------------
 GIS ANALYSIS - Nearest Bikeshare Station
     INPUT:  User inputs desired address (ex: home or school)
@@ -425,7 +381,7 @@ fetch('https://raw.githubusercontent.com/kshoester/Group-Project/Alex/stations.g
     });
 
 //Bike share stations layer. Larger as you zoom into the map (vice versa).
-map.on('load', function() {
+map.on('load', function () {
     map.addSource('bikeShareStationsData', {
         type: 'geojson',
         data: bikeShareStations
@@ -453,7 +409,7 @@ let nearestStationMarker = null;
 let nearestStationPopup = null;
 
 //Use the Turf.js nearest point function in conjunction with the MapBox geocoder.
-geocoder.on('result', function(ev) {
+geocoder.on('result', function (ev) {
     let queryResult = ev.result.geometry;
     let nearestBikeStation = turf.nearestPoint(queryResult, bikeShareStations);
     let stationName = nearestBikeStation.properties.name;
@@ -469,7 +425,7 @@ geocoder.on('result', function(ev) {
     nearestStationPopup = new mapboxgl.Popup({
         closeButton: false
     })
-    .setHTML('<h4>Nearest bikeshare station: </h4><p>' + stationName + '</p>')
+        .setHTML('<h4>Nearest bikeshare station: </h4><p>' + stationName + '</p>')
 
     //Zoom map to nearest bike station on address input
     map.flyTo({
@@ -480,11 +436,11 @@ geocoder.on('result', function(ev) {
 
 //Popup window for the nearest bike station. Made it so that if the user clicks within a 40m range the popup will appear.
 //Easier to use, especially when zoomed out or on a trackpad. Popup closes when A) a new address is inputed or B) user clicks anywhere else on the map.
-map.on('click', function(e) {
+map.on('click', function (e) {
     if (!nearestStationMarker) return;
     let clickPoint = turf.point([e.lngLat.lng, e.lngLat.lat]);//Where user clicked
     let stationPoint = turf.point(nearestStationMarker.getLngLat().toArray());//Where the nearest station is Lat/Lon
-    let stationClickRegion = turf.distance(clickPoint, stationPoint, {units: 'meters'});//Clickable region for station
+    let stationClickRegion = turf.distance(clickPoint, stationPoint, { units: 'meters' });//Clickable region for station
 
     //40m range. Can be adjusted easily for larger / smaller ranges. 
     if (stationClickRegion <= 40) {
@@ -500,7 +456,7 @@ map.on('click', function(e) {
         nearestStationMarker = null;
         nearestStationPopup = null;
     }
-}); 
+});
 
 document.getElementById('bikeCheck').addEventListener('change', (e) => {
     map.setLayoutProperty(
