@@ -11,12 +11,13 @@
     position: relative;
     font: 14px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
     background: rgba(255, 255, 255, 0.8);
-    top: 0;
+    top: 520px;
     left: 0;
-    width: 260px;
+    width: 250px;
     margin: 10px 0 0 10px;
-    padding: 10px;
+    padding: 1px;
     overflow: visible;
+    z-index: 10000;
 }
 
 #geocoder {
@@ -75,15 +76,16 @@ label {
 
 form {
     padding-bottom: 20px;
+    left: 10px;
 }
 
 #deselectHoods {
     position: absolute; 
     z-index: 1000; 
-    top: 450px; 
-    left: 20px; 
+    top: 410px; 
+    left: 10px; 
     background-color: white; 
-    padding: 10px;
+    padding: 2px;
     border: none; 
     cursor: pointer; 
     border-radius: 5px; 
@@ -96,3 +98,30 @@ form {
     left: 10px;
     z-index: 1000;
 } */
+
+.opacity-slider-container {
+    user-select: none;
+    position: absolute;
+    top: 450px; 
+    left: 10px;
+    z-index: 1000;
+    background-color: white; 
+    padding: 2px;
+    border: none; 
+    cursor: pointer; 
+    border-radius: 5px; 
+    font-size: 16px; 
+}
+
+.sidebar {
+    height: 100%;
+    width: 250px;
+    position: absolute;
+    z-index: 9999;
+    top: 60px;
+    left: 10px;
+    overflow-x: hidden;
+    background-color: lightgrey;
+    height: 520px;
+    border: 2px solid black;
+}

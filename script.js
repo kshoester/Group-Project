@@ -47,21 +47,6 @@ fetch('https://raw.githubusercontent.com/kshoester/Group-Project/main/data/tdsb-
         console.log(response);
         TDSBSchoolsData = response;
     });
-
-// TDSBSchoolsData.features = TDSBSchoolsData.features.map(feature => {
-//     if (feature.geometry.type === "MultiPoint" && feature.geometry.coordinates.length === 1) {
-//         return {
-//             ...feature,
-//             geometry: {
-//                 type: "Point",
-//                 coordinates: feature.geometry.coordinates[0]
-//             }
-//         };
-//     }
-//     return feature;
-// });
-    
-
 /*--------------------------------------------------------------------
 DATA VISUALIZATION
 --------------------------------------------------------------------*/
@@ -80,16 +65,15 @@ map.on('load', () => {
                 'interpolate',
                 ['linear'],
                 ['get', 'BIKETHEFT_2019'],
-                0, '#FFEDA0',
-                10, '#FED976',
-                20, '#FEB24C',
-                30, '#FD8D3C',
-                40, '#FC4E2A',
-                50, '#E31A1C',
-                60, '#BD0026',
-                70, '#800026'
+                0, '#FFF7EC',
+                36, '#FEE1BA',
+                72, '#FDC38D',
+                108, '#FC8D59',
+                144, '#E7533A',
+                180, '#BF100A',
+                216, '#7F0000'
             ],
-            'fill-opacity': 0.75,
+            'fill-opacity': 0.5,
             'fill-outline-color': 'black'
         },
     });
@@ -109,21 +93,6 @@ map.on('load', () => {
         },
     });
 
-    // pedestrian network
-   /* map.addSource('ped-network-data', {
-        type: 'geojson',
-        data: 'https://raw.githubusercontent.com/kshoester/group-project/main/data/pedestrian-network.geojson' //update link
-    });
-    map.addLayer({
-        'id': 'ped-network',
-        'type': 'line',
-        'source': 'ped-network-data',
-        'paint': {
-            'line-color': 'yellow',
-            'line-width': 1 
-        },
-    }); */
-
     // tdsb schools
     map.addSource('tdsb-data', {
         type: 'geojson',
@@ -134,7 +103,13 @@ map.on('load', () => {
         'type': 'circle',
         'source': 'tdsb-data',
         'paint': {
-            'circle-radius': 3,
+            'circle-radius': [
+                "interpolate",
+                ["linear"],
+                ["zoom"],
+                10, 1,
+                15, 10
+            ],
             'circle-color': 'blue'
         },
     });
@@ -145,7 +120,13 @@ map.on('load', () => {
         'type': 'circle',
         'source': 'tdsb-data',
         'paint': {
-            'circle-radius': 10,
+            'circle-radius': [
+                "interpolate",
+                ["linear"],
+                ["zoom"],
+                10, 1,
+                15, 10
+            ],
             'circle-color': '#FFFF00'
         },
         'filter': ['in', ['get', 'SCH_NAME'], '']
@@ -161,7 +142,13 @@ map.on('load', () => {
         'type':'circle',
         'source': 'pedcyc-collisions-data',
         'paint': {
-            'circle-radius': 3,
+            'circle-radius': [
+                "interpolate",
+                ["linear"],
+                ["zoom"],
+                10, 1,
+                15, 10
+            ],
             'circle-color': 'red'
         },
         'filter': ['all',    
@@ -175,7 +162,13 @@ map.on('load', () => {
         'type': 'circle',
         'source': 'pedcyc-collisions-data',
         'paint': {
-            'circle-radius': 3,
+            'circle-radius': [
+                "interpolate",
+                ["linear"],
+                ["zoom"],
+                10, 1,
+                15, 10
+            ],
             'circle-color': 'purple'
         },
         'filter': ['all',
@@ -183,6 +176,10 @@ map.on('load', () => {
             ['==', ['get', 'YEAR'], 2019]],
     });
 
+    document.getElementById('opacity-slider').addEventListener('input', function(e) {
+        let layerOpacity = e.target.value;
+        map.setPaintProperty('crime-rates', 'fill-opacity', parseFloat(layerOpacity));
+    });
 });
 
 
@@ -190,26 +187,26 @@ map.on('load', () => {
 INTERACTIVITY EVENTS
 --------------------------------------------------------------------*/
 // dropdown selection of schools
-let tdsbvalue;
+// let tdsbvalue;
 
-document.getElementById("tdsbfieldset").addEventListener('change',(e) => {   
-    tdsbvalue = document.getElementById('school').value;
+// document.getElementById("tdsbfieldset").addEventListener('change',(e) => {   
+//     tdsbvalue = document.getElementById('school').value;
 
-    console.log(tdsbvalue); 
+//     console.log(tdsbvalue); 
 
-    if (tdsbvalue == 'All') {
-        map.setFilter(
-            'tdsb-schools',
-            ['has', '_id'] 
-        );
-    } else {
-        map.setFilter(
-            'tdsb-schools',
-            ['==', ['get', 'SCH_NAME'], tdsbvalue] 
-        );
-    }
+//     if (tdsbvalue == 'All') {
+//         map.setFilter(
+//             'tdsb-schools',
+//             ['has', '_id'] 
+//         );
+//     } else {
+//         map.setFilter(
+//             'tdsb-schools',
+//             ['==', ['get', 'SCH_NAME'], tdsbvalue] 
+//         );
+//     }
 
-});
+// });
 
 // dropdown selection of schools by municipality
 let munivalue;
@@ -266,14 +263,13 @@ document.getElementById('deselectHoods').addEventListener('click', function() {
         'interpolate',
         ['linear'],
         ['get', 'BIKETHEFT_2019'],
-        0, '#FFEDA0',
-        10, '#FED976',
-        20, '#FEB24C',
-        30, '#FD8D3C',
-        40, '#FC4E2A',
-        50, '#E31A1C',
-        60, '#BD0026',
-        70, '#800026'
+        0, '#FFF7EC',
+        36, '#FEE1BA',
+        72, '#FDC38D',
+        108, '#FC8D59',
+        144, '#E7533A',
+        180, '#BF100A',
+        216, '#7F0000'
     ], 'fill-opacity', 1, 'fill-outline-color', 'black');
     map.setFilter('tdsb-highlight', ['==', ['get', 'SCH_NAME'], '']);
 
@@ -285,12 +281,6 @@ document.getElementById('deselectHoods').addEventListener('click', function() {
     }
     console.clear();
 });
-
-
-
-
-
-
 
 
 
@@ -498,6 +488,72 @@ map.on('click', function(e) {
 
     //40m range. Can be adjusted easily for larger / smaller ranges. 
     if (stationClickRegion <= 40) {
-        nearestStationPopup.setLngLat(nearestStationMarker.getLngLat()).addTo(map);
+        if (!nearestStationPopup.isOpen()) {
+            nearestStationPopup.setLngLat(nearestStationMarker.getLngLat()).addTo(map);
+        }
+    } else {
+        // If the click is outside the 40m range, remove the marker and popup
+        if (nearestStationMarker) nearestStationMarker.remove();
+        if (nearestStationPopup) nearestStationPopup.remove();
+
+        // After removing, set them to null to indicate they're not currently displayed
+        nearestStationMarker = null;
+        nearestStationPopup = null;
     }
 }); 
+
+document.getElementById('bikeCheck').addEventListener('change', (e) => {
+    map.setLayoutProperty(
+        'bike-paths',
+        'visibility',
+        e.target.checked ? 'visible' : 'none'
+    );
+});
+
+document.getElementById('pedCheck').addEventListener('change', (e) => {
+    map.setLayoutProperty(
+        'ped-collisions',
+        'visibility',
+        e.target.checked ? 'visible' : 'none'
+    );
+});
+
+document.getElementById('cycCheck').addEventListener('change', (e) => {
+    map.setLayoutProperty(
+        'cyc-collisions',
+        'visibility',
+        e.target.checked ? 'visible' : 'none'
+    );
+});
+
+document.getElementById('shareCheck').addEventListener('change', (e) => {
+    map.setLayoutProperty(
+        'bikeShareStations',
+        'visibility',
+        e.target.checked ? 'visible' : 'none'
+    );
+});
+
+document.getElementById('indexCheck').addEventListener('change', (e) => {
+    map.setLayoutProperty(
+        'crime-rates',
+        'visibility',
+        e.target.checked ? 'visible' : 'none'
+    );
+});
+
+document.getElementById('schoolCheck').addEventListener('change', (e) => {
+    map.setLayoutProperty(
+        'tdsb-schools',
+        'visibility',
+        e.target.checked ? 'visible' : 'none'
+    );
+});
+
+document.getElementById('schoolCheck').addEventListener('change', (e) => {
+    map.setLayoutProperty(
+        'tdsb-highlight',
+        'visibility',
+        e.target.checked ? 'visible' : 'none'
+    );
+});
