@@ -27,13 +27,25 @@
     <!-- NAV BAR -->
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <div class="logo-image">
+                    <img src="https://www.eastprestondaycare.ca/wp-content/uploads/2021/07/Active-Transportation.png"
+                        class="img-fluid">
+                </div>
+            </a>
+            <a class="navbar-brand" href="home.html">Home</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html">Home</a>
+                        <a class="nav-link" href="index.html">Map</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" target="blank" href="about.html">Ease of Transportation Index</a>
+                        <a class="nav-link" href="about.html">Ease of Transportation Index</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
@@ -60,15 +72,17 @@
     </nav>
     <!--Bootstrap Cards-->
     <div>
-        <div class="header">
-            <center>
-                <h1>Ease of Transportation Index</h1>
-            </center>
+        <div id="rectangle2">
+            <div>
+                <center>
+                    <h1 class="text2">Ease of Transportation Index</h1>
+                </center>
+            </div>
         </div>
         <center>
             <div class="row">
                 <div class="col">
-                    <div class="card" style="width: 18rem;">
+                    <div class="card">
                         <div class="card-header">
                             <center>Number of Collisions</center>
                         </div>
@@ -76,67 +90,67 @@
                             <p class="card-text">The number of collisions variable was created to determine the number
                                 of motor vehicle incidents that occurred with pedestrians and cyclists.
                                 This variable used data from the Motor Vehicle Collisions dataset,
-                                which includes all traffic collisions events where a person was either Killed or Seriously Injured (KSI) from 2006 to 2021.
+                                which includes all traffic collisions events where a person was either Killed or
+                                Seriously Injured (KSI) from 2006 to 2021.
                                 We decided to use data from the year 2019 to conduct our analysis.
                             </p>
-                            <div class="card-footer">For more information <a href="https://open.toronto.ca/dataset/motor-vehicle-collisions-involving-killed-or-seriously-injured-persons/" target="_blank" class="card-link">click here</a>
-                            </div>
-                    </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card" style="width: 18rem;">
-                            <div class="card-header">
-                                <center>Walk Score</center>
-                            </div>
-                            <div class="card-body">
-                                <p class="card-text"> Measures the walkability of a
-                                    location based on urban morphology, programs or land use, population and
-                                    intersection density. <br> <br>
-                                    <b>Score from 0–100: </b><br>
-                                    0–24 Heavily car-dependent <br>
-                                    25–49 Car-dependent <br>
-                                    50–69 Somewhat walkable <br>
-                                    70–89 Very walkable <br>
-                                    90–100 Walkers paradise <br>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card" style="width: 18rem;">
-                            <div class="card-header">
-                                <!-- still need link to dataset and a description of bike theft rate variable -->
-                                <center>Bike Theft Rate</center>
-                            </div>
-                            <div class="card-body">
-                                <p class="card-text">This variable was included to allow users to gain an understanding of the number of bike thefts that occur around their neighborhood and schools. 
-                                    This data was taken from the Neighbourhood Crime Rates dataset, specifically the columns 'BIKETHEFT_.'
-                                </p>
-                            </div>
-                            <div class="card-footer">For more information <a href="https://open.toronto.ca/dataset/neighbourhood-crime-rates/" target="_blank" class="card-link">click here</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card" style="width: 18rem;">
-                            <div class="card-header">
-                                <center>Average Speed Limit</center>
-                            </div>
-                            <div class="card-body">
-                                <p class="card-text">This variable was calculated to determine the safety of Toronto's streets based on user discretion.</p>
+                            <div class="card-footer">For more information <a
+                                    href="https://open.toronto.ca/dataset/motor-vehicle-collisions-involving-killed-or-seriously-injured-persons/"
+                                    target="_blank" class="card-link">click here</a>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header">
+                            <center>Walk Score</center>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text"> Measures the walkability of a
+                                location based on urban morphology, programs or land use, population and
+                                intersection density. <br> <br>
+                                <b>Score from 0–100: </b><br>
+                                0–24 Heavily car-dependent <br>
+                                25–49 Car-dependent <br>
+                                50–69 Somewhat walkable <br>
+                                70–89 Very walkable <br>
+                                90–100 Walkers paradise <br>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header">
+                            <center>Bike Theft Rate</center>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">This variable was included to allow users to gain an understanding of
+                                the number of bike thefts that occur around their neighborhood and schools.
+                                This data was taken from the Neighbourhood Crime Rates dataset, specifically the columns
+                                'BIKETHEFT_.'
+                            </p>
+                        </div>
+                        <div class="card-footer">For more information <a
+                                href="https://open.toronto.ca/dataset/neighbourhood-crime-rates/" target="_blank"
+                                class="card-link">click here</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header">
+                            <center>Average Speed Limit</center>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">This variable was calculated to determine the safety of Toronto's
+                                streets based on user discretion.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </center>
-        <div class="image">
-            <center>
-                <img src="https://www.eastprestondaycare.ca/wp-content/uploads/2021/07/Active-Transportation.png" alt=""
-                    style="width: 37rem;max-width: 100%;height: auto;vertical-align: 
-                    middle;border-style: none;">
-            </center>
-        </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"></script>
