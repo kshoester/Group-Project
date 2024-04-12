@@ -9,7 +9,6 @@ const map = new mapboxgl.Map({
     center: [-79.39, 43.66],
     zoom: 12,
 });
-
 /*--------------------------------------------------------------------
 MAP CONTROLS
 --------------------------------------------------------------------*/
@@ -21,13 +20,6 @@ const geocoder = new MapboxGeocoder({
     mapboxgl: mapboxgl,
     countries: 'ca',
 });
-
-// let directions = new MapboxDirections({
-//     accessToken: mapboxgl.accessToken,
-//     unit: 'metric',
-// });
-// map.addControl(directions, 'top-right');
-
 /*--------------------------------------------------------------------
 GEOJSON POINT DATA
 --------------------------------------------------------------------*/
@@ -210,7 +202,6 @@ map.on('load', () => {
             'visibility': 'none'
         }
     });
-
         // bike paths
         map.addSource('cycling-network-data', {
             type: 'geojson',
@@ -228,7 +219,6 @@ map.on('load', () => {
                 'visibility': 'none'
             }
         });
-    
         // tdsb schools
         map.addSource('tdsb-data', {
             type: 'geojson',
@@ -249,7 +239,6 @@ map.on('load', () => {
                 'circle-color': 'black'
             },
         });
-    
         // tdsb highlight layer
         map.addLayer({
             'id': 'tdsb-highlight',
@@ -267,7 +256,7 @@ map.on('load', () => {
             },
             'filter': ['in', ['get', 'SCH_NAME'], '']
         });
-
+        //Bikeshare stations
         map.addSource('bikeShareStationsData', {
             type: 'geojson',
             data: bikeShareStations
@@ -291,24 +280,25 @@ map.on('load', () => {
             }
         });
 
-    document.getElementById('opacity-slider').addEventListener('input', function (e) {
+    //Opacity slider for the EoATIndex layer.
+    document.getElementById('opacity-slider').addEventListener('input', function (e) {//listen for slidder value
         let layerOpacity = e.target.value;
-        map.setPaintProperty('EoATIndex', 'fill-opacity', parseFloat(layerOpacity));
+        map.setPaintProperty('EoATIndex', 'fill-opacity', parseFloat(layerOpacity));//update layer
     });
 
     var layers = ['PopDens', 'CollDens', 'SideDens', 'MaxSpd', 'BikeTheft'];
-
     function changeLayer(visibleLayer) {//When the option gets selected in the dropdown menu, the layer is displayed.
     layers.forEach(function(layer) {
         var visibility = layer === visibleLayer ? 'visible' : 'none';
         map.setLayoutProperty(layer, 'visibility', visibility);
     });
     }
-    //Change the state over time.
+    //Change the state over time and listen to the dropdown status.
     document.getElementById('layerSelect').addEventListener('change', function(e) {
     changeLayer(e.target.value);
     });
 
+    //Deselect button to reset EoATIndex.
     document.getElementById('deselectHoods').addEventListener('click', function () {
         map.setPaintProperty('EoATIndex', 'fill-color', [
             'interpolate',
@@ -322,6 +312,7 @@ map.on('load', () => {
         ], 'fill-opacity', 1, 'fill-outline-color', 'black');
         map.setFilter('tdsb-highlight', ['==', ['get', 'SCH_NAME'], '']);
     
+        //reset popup windows
         let popups = document.getElementsByClassName('mapboxgl-popup');
         if (popups.length) {
             for (let i = popups.length - 1; i >= 0; i--) {
@@ -331,33 +322,24 @@ map.on('load', () => {
         console.clear();
     });
 });
-
-
-
-
 /*--------------------------------------------------------------------
 INTERACTIVITY EVENTS
 --------------------------------------------------------------------*/
 // dropdown selection of schools by municipality
 let munivalue;
-
 document.getElementById("munifieldset").addEventListener('change', (e) => {
     munivalue = document.getElementById('muni').value;
-
-    console.log(munivalue);
-
-    if (munivalue == 'All') {
+    if (munivalue == 'All') {//All schools
         map.setFilter(
             'tdsb-schools',
             ['has', '_id']
         );
     } else {
-        map.setFilter(
+        map.setFilter(//Only schools in a given municipiality from the drop down.
             'tdsb-schools',
             ['==', ['get', 'MUNICIPALITY'], munivalue]
         );
     }
-
 });
 
 // return to full extent
@@ -368,13 +350,6 @@ document.getElementById('returnbutton').addEventListener('click', () => {
         essential: true
     });
 });
-
-
-
-/*--------------------------------------------------------------------
-LEGEND
---------------------------------------------------------------------*/
-
 /*--------------------------------------------------------------------
 GIS ANALYSIS - Schools Inside of a given Census Tract
     INPUT:  User clicks on a census tract (ex: where the target school
@@ -392,23 +367,25 @@ GIS ANALYSIS - Schools Inside of a given Census Tract
             the edge of a tract. Additionally, see the limits to the 
             'Ease of Active Transit Index'.
 --------------------------------------------------------------------*/
-
 map.on('click', 'EoATIndex', function (e) {
+    //Empty variables relative to function.
     let selectedCT = e.features[0];
     let hoodID = e.features[0].properties._id1;
 
+    //Update hood paint when clicked.
     map.setPaintProperty('EoATIndex', 'fill-color', [
         'match', ['get', '_id1'], hoodID, '#f00', '#fff'
     ]);
 
+    //Find which schools are within the selectedd neighbourhood.
     let schoolsInCT = [];
     TDSBSchoolsData.features.forEach(school => {
         if (turf.booleanPointInPolygon(turf.point(school.geometry.coordinates[0]), selectedCT)) {
             schoolsInCT.push(school.properties.SCH_NAME || school.properties.PLACE_NAME);
         }
     });
-    console.log("Schools within the selected census tract:", schoolsInCT.join(", "));
 
+    //Prepare data for popup. Nighbourhood and School names.
     if (schoolsInCT.length > 0) {
         let filter = ['match', ['get', 'SCH_NAME'], schoolsInCT, true, false];
         map.setFilter('tdsb-highlight', filter);
@@ -416,6 +393,7 @@ map.on('click', 'EoATIndex', function (e) {
         map.setFilter('tdsb-highlight', ['==', ['get', 'SCH_NAME'], '']);
     }
 
+    //Popup window on neighbourhood.
     let popupContent = `<strong>Census Tract:</strong> ${selectedCT.properties.AREA_NA2}
         <br><strong>Schools:</strong> ${schoolsInCT.join(', ')}`;
     new mapboxgl.Popup()
@@ -423,8 +401,6 @@ map.on('click', 'EoATIndex', function (e) {
         .setHTML(popupContent)
         .addTo(map);
 });
-
-
 /*--------------------------------------------------------------------
 GIS ANALYSIS - Nearest Bikeshare Station
     INPUT:  User inputs desired address (ex: home or school)
@@ -492,14 +468,10 @@ map.on('click', function (e) {
         nearestStationPopup = null;
     }
 });
-
-
-
-
 /*--------------------------------------------------------------------
 LAYER TOGGLES (CHECK BOXES)
 --------------------------------------------------------------------*/
-document.getElementById('bikeCheck').addEventListener('change', (e) => {
+document.getElementById('bikeCheck').addEventListener('change', (e) => {//Bike paths
     map.setLayoutProperty(
         'bike-paths',
         'visibility',
@@ -507,7 +479,7 @@ document.getElementById('bikeCheck').addEventListener('change', (e) => {
     );
 });
 
-document.getElementById('shareCheck').addEventListener('change', (e) => {
+document.getElementById('shareCheck').addEventListener('change', (e) => {//Bikeshare stations
     map.setLayoutProperty(
         'bikeShareStations',
         'visibility',
@@ -515,7 +487,7 @@ document.getElementById('shareCheck').addEventListener('change', (e) => {
     );
 });
 
-document.getElementById('schoolCheck').addEventListener('change', (e) => {
+document.getElementById('schoolCheck').addEventListener('change', (e) => {//TDSB School locations
     map.setLayoutProperty(
         'tdsb-schools',
         'visibility',
@@ -523,7 +495,7 @@ document.getElementById('schoolCheck').addEventListener('change', (e) => {
     );
 });
 
-document.getElementById('schoolCheck').addEventListener('change', (e) => {
+document.getElementById('schoolCheck').addEventListener('change', (e) => {//TDSB Highlight layer
     map.setLayoutProperty(
         'tdsb-highlight',
         'visibility',
@@ -531,7 +503,7 @@ document.getElementById('schoolCheck').addEventListener('change', (e) => {
     );
 });
 
-document.getElementById('indexCheck').addEventListener('change', (e) => {
+document.getElementById('indexCheck').addEventListener('change', (e) => {//Index 
     map.setLayoutProperty(
         'EoATIndex',
         'visibility',

@@ -57,22 +57,6 @@
     font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
-#returnToToronto {
-    left: 10px;
-    background-color: white;
-    padding: 2px;
-    border: 2px solid black;
-    cursor: pointer;
-    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-}
-
-/* .mapboxgl-ctrl-directions {
-    position: absolute;
-    top: 500px;
-    left: 10px;
-    z-index: 1000;
-} */
-
 .opacity-slider-container {
     user-select: none;
     position: absolute;
