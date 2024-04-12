@@ -33,7 +33,14 @@ GEOJSON POINT DATA
 --------------------------------------------------------------------*/
 let collisionsgeojson;
 let TDSBSchoolsData;
+let bikeShareStations;
 
+fetch('https://raw.githubusercontent.com/kshoester/Group-Project/Alex/stations.geojson')
+    .then(response => response.json())
+    .then(response => {
+        console.log(response);
+        bikeShareStations = response;
+    });
 fetch('https://raw.githubusercontent.com/kshoester/group-project/main/data/motor-vehicle-collisions.geojson') //update
     .then(response => response.json())
     .then(response => {
@@ -64,45 +71,9 @@ map.on('load', () => {
             'line-color': 'green',
             'line-width': 1
         },
-    });
-
-    // tdsb schools
-    map.addSource('tdsb-data', {
-        type: 'geojson',
-        data: TDSBSchoolsData
-    });
-    map.addLayer({
-        'id': 'tdsb-schools',
-        'type': 'circle',
-        'source': 'tdsb-data',
-        'paint': {
-            'circle-radius': [
-                "interpolate",
-                ["linear"],
-                ["zoom"],
-                10, 1,
-                15, 10
-            ],
-            'circle-color': 'blue'
-        },
-    });
-
-    // tdsb highlight layer
-    map.addLayer({
-        'id': 'tdsb-highlight',
-        'type': 'circle',
-        'source': 'tdsb-data',
-        'paint': {
-            'circle-radius': [
-                "interpolate",
-                ["linear"],
-                ["zoom"],
-                10, 1,
-                15, 10
-            ],
-            'circle-color': '#FFFF00'
-        },
-        'filter': ['in', ['get', 'SCH_NAME'], '']
+        layout: {
+            'visibility': 'none'
+        }
     });
 
     //Ease of Active Transit Index
@@ -129,6 +100,68 @@ map.on('load', () => {
             'fill-outline-color': 'black'
         } 
     });
+
+        // tdsb schools
+        map.addSource('tdsb-data', {
+            type: 'geojson',
+            data: TDSBSchoolsData
+        });
+        map.addLayer({
+            'id': 'tdsb-schools',
+            'type': 'circle',
+            'source': 'tdsb-data',
+            'paint': {
+                'circle-radius': [
+                    "interpolate",
+                    ["linear"],
+                    ["zoom"],
+                    10, 1,
+                    15, 10
+                ],
+                'circle-color': 'black'
+            },
+        });
+    
+        // tdsb highlight layer
+        map.addLayer({
+            'id': 'tdsb-highlight',
+            'type': 'circle',
+            'source': 'tdsb-data',
+            'paint': {
+                'circle-radius': [
+                    "interpolate",
+                    ["linear"],
+                    ["zoom"],
+                    10, 1,
+                    15, 10
+                ],
+                'circle-color': '#FFFF00'
+            },
+            'filter': ['in', ['get', 'SCH_NAME'], '']
+        });
+
+        map.addSource('bikeShareStationsData', {
+            type: 'geojson',
+            data: bikeShareStations
+        });
+        map.addLayer({
+            id: 'bikeShareStations',
+            type: 'circle',
+            source: 'bikeShareStationsData',
+            paint: {
+                'circle-radius': [
+                    "interpolate",
+                    ["linear"],
+                    ["zoom"],
+                    10, 1,
+                    15, 10
+                ],
+                'circle-color': 'grey'
+            },
+            layout: {
+                'visibility': 'none'
+            }
+        });
 
     document.getElementById('opacity-slider').addEventListener('input', function (e) {
         let layerOpacity = e.target.value;
@@ -209,15 +242,6 @@ document.getElementById('deselectHoods').addEventListener('click', function () {
 
 
 /*--------------------------------------------------------------------
-GIS ANALYSIS - Ease of Active Transportation Index
-    INPUT:  
-    OUTPUT: 
-    GOAL:   
---------------------------------------------------------------------*/
-
-
-
-/*--------------------------------------------------------------------
 GIS ANALYSIS - Schools Inside of a given Census Tract
     INPUT:  User clicks on a census tract (ex: where the target school
             is located).
@@ -277,43 +301,8 @@ GIS ANALYSIS - Nearest Bikeshare Station
             bikeshare coverage, notably North York, Etobicoke, and 
             Scarborough.
 --------------------------------------------------------------------*/
-
 //Geocoder for user to input address. 
 document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
-
-//NOTE: From here to comment ***** will be placed in the above sections for fetching / adding layers. It is here for programming ease.
-//Fetch bike share stations GeoJSON from GitHub folder. Converted from JSON (See Python script).
-let bikeShareStations;
-fetch('https://raw.githubusercontent.com/kshoester/Group-Project/Alex/stations.geojson')
-    .then(response => response.json())
-    .then(response => {
-        console.log(response);
-        bikeShareStations = response;
-    });
-
-//Bike share stations layer. Larger as you zoom into the map (vice versa).
-map.on('load', function () {
-    map.addSource('bikeShareStationsData', {
-        type: 'geojson',
-        data: bikeShareStations
-    });
-    map.addLayer({
-        id: 'bikeShareStations',
-        type: 'circle',
-        source: 'bikeShareStationsData',
-        paint: {
-            'circle-radius': [
-                "interpolate",
-                ["linear"],
-                ["zoom"],
-                10, 1,
-                15, 10
-            ],
-            'circle-color': 'black'
-        }
-    });
-});
-//*****
 
 //Popup variables to default at null.
 let nearestStationMarker = null;
@@ -370,25 +359,15 @@ map.on('click', function (e) {
     }
 });
 
+
+
+
+/*--------------------------------------------------------------------
+LAYER TOGGLES (CHECK BOXES)
+--------------------------------------------------------------------*/
 document.getElementById('bikeCheck').addEventListener('change', (e) => {
     map.setLayoutProperty(
         'bike-paths',
-        'visibility',
-        e.target.checked ? 'visible' : 'none'
-    );
-});
-
-document.getElementById('pedCheck').addEventListener('change', (e) => {
-    map.setLayoutProperty(
-        'ped-collisions',
-        'visibility',
-        e.target.checked ? 'visible' : 'none'
-    );
-});
-
-document.getElementById('cycCheck').addEventListener('change', (e) => {
-    map.setLayoutProperty(
-        'cyc-collisions',
         'visibility',
         e.target.checked ? 'visible' : 'none'
     );
@@ -404,7 +383,7 @@ document.getElementById('shareCheck').addEventListener('change', (e) => {
 
 document.getElementById('indexCheck').addEventListener('change', (e) => {
     map.setLayoutProperty(
-        'crime-rates',
+        'EoATIndex',
         'visibility',
         e.target.checked ? 'visible' : 'none'
     );

@@ -27,7 +27,7 @@
   <div id="map" class="map-container"></div>
 
   <!-- NAV BAR -->
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="light">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">
         <div class="logo-image">
@@ -43,10 +43,10 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link" href="home.html">Instructions</a>
+            <a class="nav-link" href="HTML/home.html">Instructions</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="about.html">Ease of Active Transit Index</a>
+            <a class="nav-link" href="HTML/about.html">Ease of Active Transit Index</a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -100,13 +100,11 @@
   <div id='legend' class="legend">
     <h4> <center>Ease of Active Transit Index</center></h4>
     <h8>See Ease of Active Transit Index tab on the navigation bar for methodology</h8>
-    <div><span style='background-color: #FFF7EC'></span>0</div>
-    <div><span style='background-color: #FEE1BA'></span>1-36</div>
-    <div><span style='background-color: #FDC38D'></span>37-72</div>
-    <div><span style='background-color: #FC8D59'></span>73-108</div>
-    <div><span style='background-color: #E7533A'></span>109-144</div>
-    <div><span style='background-color: #BF100A'></span>145-180</div>
-    <div><span style='background-color: #7F0000'></span>181-216</div>
+    <div><span style='background-color: #CA0020'></span>Lowest</div>
+    <div><span style='background-color: #F4A582'></span>Low</div>
+    <div><span style='background-color: #F7F7F7'></span>Fair</div>
+    <div><span style='background-color: #92C5DE'></span>High</div>
+    <div><span style='background-color: #0571B0'></span>Highest</div>
   </div>
 
   <div class="sidebar">
@@ -114,23 +112,15 @@
     <button id="deselectHoods">Deselect Neighbourhood</button>
     <div class="form-check">
       <input class="form-check-input" type="checkbox" value="" id="schoolCheck" checked>
-      Show TDSB schools
+      Show TDSB schools (black)
     </div>
     <div class="form-check">
-      <input class="form-check-input" type="checkbox" value="" id="bikeCheck" checked>
+      <input class="form-check-input" type="checkbox" value="" id="bikeCheck" unchecked>
       Show bike paths
     </div>
     <div class="form-check">
-      <input class="form-check-input" type="checkbox" value="" id="shareCheck" checked>
-      Show bikeshare stations
-    </div>
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" value="" id="pedCheck" checked>
-      Show pedestrian / auto collisions
-    </div>
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" value="" id="cycCheck" checked>
-      Show cyclist / auto collisions
+      <input class="form-check-input" type="checkbox" value="" id="shareCheck" unchecked>
+      Show bikeshare stations (grey)
     </div>
     <div class="form-check">
       <input class="form-check-input" type="checkbox" value="" id="indexCheck" checked>

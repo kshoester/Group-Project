@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TDSB Sandbox Initiative</title>
+    <!-- mapbox API -->
+    <script src='https://api.mapbox.com/mapbox-gl-js/v3.1.2/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v3.1.2/mapbox-gl.css' rel='stylesheet' />
+    <!-- mapbox geocoder plugin -->
+    <script
+        src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.2/mapbox-gl-geocoder.min.js"></script>
+    <link rel="stylesheet"
+        href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.2/mapbox-gl-geocoder.css"
+        type="text/css">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- CSS -->
+    <link rel="stylesheet" href="../style.css">
+    <!-- Turf.js -->
+    <script src='https://unpkg.com/@turf/turf@6/turf.min.js'></script>
+</head>
+
+<body>
+    <!-- NAV BAR -->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <div class="logo-image">
+                    <img src="https://www.eastprestondaycare.ca/wp-content/uploads/2021/07/Active-Transportation.png"
+                        class="img-fluid">
+                </div>
+            </a>
+            <a class="navbar-brand" href="../index.html">Home</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                  <a class="nav-link" href="home.html">Instructions</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">Ease of Active Transit Index</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Resources
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" target="blank"
+                                    href="https://www.toronto.ca/wp-content/uploads/2018/11/917a-TS_VisionZero-SchoolChildren-Brochure.pdf">VisionZero
+                                    Safety Guide</a></li>
+                            <li><a class="dropdown-item" target="blank"
+                                    href="http://guide.saferoutesinfo.org/">SafeRoutesToSchool Guide</a></li>
+                            <li><a class="dropdown-item" target="blank"
+                                    href="https://open.toronto.ca/dataset/cycling-network/">Toronto's Cycling Network
+                                    Dataset</a></li>
+                            <li><a class="dropdown-item" target="blank"
+                                    href="https://open.toronto.ca/dataset/pedestrian-network/">Toronto's Pedestrian
+                                    Network Dataset</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div id="rectangle">
+        <h2 class="card-header-title">
+            <center>
+                What is Active Transportation?
+            </center>
+        </h2>
+        <h6 class="card-text">
+            The Government of Canada defines active transportation as "using your own power to get from on place to
+            another."
+            This includes: <br>
+            - walking <br>
+            - biking <br>
+            - skateboarding <br>
+            - in-line skating or rollerblading <br>
+            - jogging and running <br>
+            - non-mechanized wheel chairing <br>
+            - snowshoeing and cross-country skiing <br>
+        </h6>
+        <h2 class="card-header">
+            <center>
+                Why is Active Transportation important?
+            </center>
+        </h2>
+        <h4 class="card-text">
+            Active transporation is beneficial on many different levels. It is good for our health, society,
+            transporation system, environment, and economy.
+            Active transportation gives us an opportunity to be physically active on a regular basis.
+            It is also accessible to all Canadians and increases social interactions.
+            Furthermore, active transportation reduces road congestion and therefore also contributes to reducing
+            greenhouse gas emission.
+            Another side benefit is that it saves money on gas and parking!
+        </h4>
+    </div>
+    <div id="box">
+        <h2 class="card-header">
+            <center>
+                Instructions on how to use the map
+            </center>
+        </h2>
+        <h4 class="card-text">
+            To begin, click the <a href="index.html" class="card-link">Home</a> tab on the navigation bar to see the map of Toronto. 
+            On the left hand side, under Promoting Active Transit in TDSB School Commutes, you will see various different colored points/lines on the map. These points/lines can be turned on or
+            off (meaning visible or non-visible) by clicking the checked box. <br> <br>
+            The black points represent Toronto District School Board school locations and the grey points represent
+            bikeshare stations, both of which can be toggled according to user preferences.
+            The green lines are the bike paths around the city. <br> <br>
+            Finally the ease of active transit index is displayed as choropleth layer on the map. 
+            The ease of active transit index legend is displayed in the right corner of the screen. The more blue an area is, the more that the neighbourhood is suited for active transpotation. The more red,
+            the more obstancles and help that a neighborhood will need to acheive active transportation goals.
+            <a href="about.html" class="card-link">click here</a>.
+            If you click a neighborhood, the neighborhoods name and a list of the schools in that neighborhood will appear (highlited in yellow), according to the census tract.
+            To deselect a neighborhood, click the deselect neighborhood button on the left.
+            <br> <br>
+            In the bottom left corner, there is a search for location bar. Here you can type in a home address or the address of a school.
+            Once you click enter, two points will show up. The dark blue point is the address you entered while the light blue point is the nearest bikeshare station.
+            If you click the light blue point, a pop-up window will appear showing the name of the station.
+        </h4>
+    </div>
+</body>
+
+</html>
