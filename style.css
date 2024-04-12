@@ -1,3 +1,4 @@
+
 .map-container {
     position: absolute;
     top: 0;
@@ -11,9 +12,9 @@
     position: relative;
     font: 14px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
     background: rgba(255, 255, 255, 0.8);
-    top: 480px;
-    left: 0;
-    width: 250px;
+    top: 25px;
+    left: 1250px;
+    width: 225px;
     margin: 10px 0 0 10px;
     padding: 1px;
     overflow: visible;
@@ -43,7 +44,6 @@
     padding: 10px;
     overflow: visible;
 }
-
 
 #deselectHoods {
     position: absolute;
@@ -101,7 +101,8 @@
 .card {
     max-width: 30rem;
     margin-right: 5px;
-    top: 50%;
+    top: 60%;
+    left: 1%;
     border: 2px solid #7F0000;
     font: 12px 'Helvetica Neue', Arial, Helvetica, sans-serif;
     padding: 10px;
@@ -111,15 +112,17 @@
 .card-header-title {
     font: 24px 'Helvetica Neue', Arial, Helvetica, sans-serif;
     font-weight: bold;
+    color: #7F0000;
 }
 
 .card-header {
     font: 18px 'Helvetica Neue', Arial, Helvetica, sans-serif;
     font-weight: bold;
+    color: #7F0000;
 }
 
 .card-text {
-    font: 14px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font: 12px 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 .card-footer{
     font: 12px 'Helvetica Neue', Arial, Helvetica, sans-serif;
@@ -200,23 +203,16 @@ form {
     padding: 10px;
 }
 #box {
-    height: 260px;
+    height: 275px;
     width: 1200px;
     position: absolute;
-    top: 61%;
+    top: 58%;
     left: 11%;
     border: 2px solid #7F0000;
     font: 12px 'Helvetica Neue', Arial, Helvetica, sans-serif;
     padding: 10px;
 }
-.text {
-    font: 12px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-}
-.text2 {
-    font: 24px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-    font-weight: bold;
-    top: 10px
-}
+
 body{
     background-color: lightgrey;
 }
