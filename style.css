@@ -8,11 +8,11 @@
 }
 
 .map-search-container {
-    position: relative;
+    position: absolute;
     font: 14px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
     background: rgba(255, 255, 255, 0.8);
-    top: 480px;
-    left: 0;
+    top: 100px;
+    right: 10px;
     width: 250px;
     margin: 10px 0 0 10px;
     padding: 1px;
