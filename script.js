@@ -56,27 +56,27 @@ map.on('load', () => {
         type: 'geojson',
         data: 'https://raw.githubusercontent.com/kshoester/group-project/main/data/neighbourhood-crime-rates.geojson' // Update link if necessary
     });
-    map.addLayer({
-        'id': 'crime-rates',
-        'type': 'fill',
-        'source': 'crime-rates-data',
-        'paint': {
-            'fill-color': [
-                'interpolate',
-                ['linear'],
-                ['get', 'BIKETHEFT_2019'],
-                0, '#FFF7EC',
-                36, '#FEE1BA',
-                72, '#FDC38D',
-                108, '#FC8D59',
-                144, '#E7533A',
-                180, '#BF100A',
-                216, '#7F0000'
-            ],
-            'fill-opacity': 0.5,
-            'fill-outline-color': 'black'
-        },
-    });
+    // map.addLayer({
+    //     'id': 'crime-rates',
+    //     'type': 'fill',
+    //     'source': 'crime-rates-data',
+    //     'paint': {
+    //         'fill-color': [
+    //             'interpolate',
+    //             ['linear'],
+    //             ['get', 'BIKETHEFT_2019'],
+    //             0, '#FFF7EC',
+    //             36, '#FEE1BA',
+    //             72, '#FDC38D',
+    //             108, '#FC8D59',
+    //             144, '#E7533A',
+    //             180, '#BF100A',
+    //             216, '#7F0000'
+    //         ],
+    //         'fill-opacity': 0.5,
+    //         'fill-outline-color': 'black'
+    //     },
+    // });
 
     // bike paths
     map.addSource('cycling-network-data', {
@@ -174,6 +174,34 @@ map.on('load', () => {
         'filter': ['all',
             ['==', ['get', 'IMPACTYPE'], 'Cyclist Collisions'],
             ['==', ['get', 'YEAR'], 2019]],
+    });
+
+    // Ease of Active Transit Index (EoATI)
+    map.addSource('EoATIndexData', {
+        type: 'geojson',
+        data: 'https://raw.githubusercontent.com/kshoester/Group-Project/main/data/EoATIndex.geojson'
+    });
+    
+    map.addLayer({
+        'id': 'crime-rates',
+        'type': 'fill',
+        'source': 'EoATIndexData',
+        'paint': {
+            'fill-color': [
+                'interpolate',
+                ['linear'],
+                ['get', 'BIKETHEFT_2019'],
+                0, '#FFF7EC',
+                36, '#FEE1BA',
+                72, '#FDC38D',
+                108, '#FC8D59',
+                144, '#E7533A',
+                180, '#BF100A',
+                216, '#7F0000'
+            ],
+            'fill-opacity': 0.5,
+            'fill-outline-color': 'black'
+        },
     });
 
     document.getElementById('opacity-slider').addEventListener('input', function (e) {
