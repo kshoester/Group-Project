@@ -99,7 +99,7 @@
   <!-- LEGEND -->
   <div id='legend' class="legend">
     <h4> <center>Ease of Active Transit Index</center></h4>
-    <h8>See Ease of Active Transit Index tab on the navigation bar for methodology</h8>
+    <h8>See Ease of Active Transit Index tab on the navigation bar for methodology. <br>Sub-layers are classified using the same colorscheme.</h8>
     <div><span style='background-color: #CA0020'></span>Lowest</div>
     <div><span style='background-color: #F4A582'></span>Low</div>
     <div><span style='background-color: #F7F7F7'></span>Fair</div>
@@ -107,6 +107,7 @@
     <div><span style='background-color: #0571B0'></span>Highest</div>
   </div>
 
+      <!-- checkform for points & lines & index layers -->
   <div class="sidebar">
     <h3>Promoting Active Transit in TDSB School Commutes</h3>
     <button id="deselectHoods">Deselect Neighbourhood</button>
@@ -124,8 +125,23 @@
     </div>
     <div class="form-check">
       <input class="form-check-input" type="checkbox" value="" id="indexCheck" checked>
-      Show ease of active transit index
+      Ease of Active Transportation Index
     </div>
+
+        <!-- dropdown selection of sub-layer -->
+    <form>
+      <fieldset id="Layers">
+        <label>Select Ease of Active Transit Sub-Layers</label>
+        <select id="layerSelect">
+          <option value="">None</option>
+          <option value="PopDens">Population Density</option>
+          <option value="CollDens">Collisions Density</option>
+          <option value="SideDens">Sidewalk Density</option>
+          <option value="MaxSpd">Maximum Speed Limit</option>
+          <option value="BikeTheft">Bike Theft Rate</option>
+        </select>
+      </fieldset>
+    </form>
 
     <!-- dropdown selection of city -->
     <form>

@@ -31,7 +31,6 @@ const geocoder = new MapboxGeocoder({
 /*--------------------------------------------------------------------
 GEOJSON POINT DATA
 --------------------------------------------------------------------*/
-let collisionsgeojson;
 let TDSBSchoolsData;
 let bikeShareStations;
 
@@ -40,12 +39,6 @@ fetch('https://raw.githubusercontent.com/kshoester/Group-Project/Alex/stations.g
     .then(response => {
         console.log(response);
         bikeShareStations = response;
-    });
-fetch('https://raw.githubusercontent.com/kshoester/group-project/main/data/motor-vehicle-collisions.geojson') //update
-    .then(response => response.json())
-    .then(response => {
-        console.log(response);
-        collisionsgeojson = response;
     });
 
 fetch('https://raw.githubusercontent.com/kshoester/Group-Project/main/data/tdsb-locations.geojson') //update
@@ -58,24 +51,6 @@ fetch('https://raw.githubusercontent.com/kshoester/Group-Project/main/data/tdsb-
 DATA VISUALIZATION
 --------------------------------------------------------------------*/
 map.on('load', () => {
-    // bike paths
-    map.addSource('cycling-network-data', {
-        type: 'geojson',
-        data: 'https://raw.githubusercontent.com/kshoester/group-project/main/data/cycling-network.geojson' //update link
-    });
-    map.addLayer({
-        'id': 'bike-paths',
-        'type': 'line',
-        'source': 'cycling-network-data',
-        'paint': {
-            'line-color': 'green',
-            'line-width': 1
-        },
-        layout: {
-            'visibility': 'none'
-        }
-    });
-
     //Ease of Active Transit Index
     map.addLayer({
         'id': 'EoATIndex',
@@ -100,7 +75,160 @@ map.on('load', () => {
             'fill-outline-color': 'black'
         } 
     });
+    //Population Density
+    map.addLayer({
+        'id': 'PopDens',
+        'type': 'fill',
+        'source': {
+            'type': 'vector',
+            'url': 'mapbox://altaylor37.1d0tv2v1'
+            },
+        'source-layer': 'EoATIndex-b99mhm',
+        'paint': {
+            'fill-color': [
+                'interpolate',
+                ['linear'],
+                ['get', 'PopDens'],
+                0, '#CA0020',
+                3349.58, '#F4A582',
+                4682.60, '#F7F7F7',
+                6811.60, '#92C5DE',
+                9154.89, '#0571B0'
+            ],
+            'fill-opacity': 0.5,
+            'fill-outline-color': 'black'
+        },
+        layout: {
+            'visibility': 'none'
+        }
+    });
+    //Collision Density
+    map.addLayer({
+        'id': 'CollDens',
+        'type': 'fill',
+        'source': {
+            'type': 'vector',
+            'url': 'mapbox://altaylor37.1d0tv2v1'
+            },
+        'source-layer': 'EoATIndex-b99mhm',
+        'paint': {
+            'fill-color': [
+                'interpolate',
+                ['linear'],
+                ['get', 'CollDens'],
+                0, '#CA0020',
+                1.04, '#F4A582',
+                3.18, '#F7F7F7',
+                7.42, '#92C5DE',
+                11.23, '#0571B0'
+            ],
+            'fill-opacity': 0.5,
+            'fill-outline-color': 'black'
+        },
+        layout: {
+            'visibility': 'none'
+        }
+    });
+    //Sidewalk Density
+    map.addLayer({
+        'id': 'SideDens',
+        'type': 'fill',
+        'source': {
+            'type': 'vector',
+            'url': 'mapbox://altaylor37.1d0tv2v1'
+            },
+        'source-layer': 'EoATIndex-b99mhm',
+        'paint': {
+            'fill-color': [
+                'interpolate',
+                ['linear'],
+                ['get', 'SideDens'],
+                0, '#CA0020',
+                12412.05, '#F4A582',
+                15129.25, '#F7F7F7',
+                18816.18, '#92C5DE',
+                23994.48, '#0571B0'
+            ],
+            'fill-opacity': 0.5,
+            'fill-outline-color': 'black'
+        },
+        layout: {
+            'visibility': 'none'
+        }
+    });
+    //Max Speed Limit
+    map.addLayer({
+        'id': 'MaxSpd',
+        'type': 'fill',
+        'source': {
+            'type': 'vector',
+            'url': 'mapbox://altaylor37.1d0tv2v1'
+            },
+        'source-layer': 'EoATIndex-b99mhm',
+        'paint': {
+            'fill-color': [
+                'interpolate',
+                ['linear'],
+                ['get', 'MaxSpd'],
+                0, '#CA0020',
+                10, '#F4A582',
+                40, '#F7F7F7',
+                50, '#92C5DE',
+                60, '#0571B0'
+            ],
+            'fill-opacity': 0.5,
+            'fill-outline-color': 'black'
+        },
+        layout: {
+            'visibility': 'none'
+        }
+    });
+    //Bike Theft Rate 
+    map.addLayer({
+        'id': 'BikeTheft',
+        'type': 'fill',
+        'source': {
+            'type': 'vector',
+            'url': 'mapbox://altaylor37.1d0tv2v1'
+            },
+        'source-layer': 'EoATIndex-b99mhm',
+        'paint': {
+            'fill-color': [
+                'interpolate',
+                ['linear'],
+                ['get', 'BIKETHE50'],
+                0, '#CA0020',
+                13, '#F4A582',
+                31, '#F7F7F7',
+                61, '#92C5DE',
+                108, '#0571B0'
+            ],
+            'fill-opacity': 0.5,
+            'fill-outline-color': 'black'
+        },
+        layout: {
+            'visibility': 'none'
+        }
+    });
 
+        // bike paths
+        map.addSource('cycling-network-data', {
+            type: 'geojson',
+            data: 'https://raw.githubusercontent.com/kshoester/group-project/main/data/cycling-network.geojson' //update link
+        });
+        map.addLayer({
+            'id': 'bike-paths',
+            'type': 'line',
+            'source': 'cycling-network-data',
+            'paint': {
+                'line-color': 'green',
+                'line-width': 1
+            },
+            layout: {
+                'visibility': 'none'
+            }
+        });
+    
         // tdsb schools
         map.addSource('tdsb-data', {
             type: 'geojson',
@@ -167,6 +295,41 @@ map.on('load', () => {
         let layerOpacity = e.target.value;
         map.setPaintProperty('EoATIndex', 'fill-opacity', parseFloat(layerOpacity));
     });
+
+    var layers = ['PopDens', 'CollDens', 'SideDens', 'MaxSpd', 'BikeTheft'];
+
+    function changeLayer(visibleLayer) {//When the option gets selected in the dropdown menu, the layer is displayed.
+    layers.forEach(function(layer) {
+        var visibility = layer === visibleLayer ? 'visible' : 'none';
+        map.setLayoutProperty(layer, 'visibility', visibility);
+    });
+    }
+    //Change the state over time.
+    document.getElementById('layerSelect').addEventListener('change', function(e) {
+    changeLayer(e.target.value);
+    });
+
+    document.getElementById('deselectHoods').addEventListener('click', function () {
+        map.setPaintProperty('EoATIndex', 'fill-color', [
+            'interpolate',
+            ['linear'],
+            ['get', 'Index'],
+            0, '#CA0020',
+            2957.08, '#F4A582',
+            3589.27, '#F7F7F7',
+            4303.43, '#92C5DE',
+            5685.18, '#0571B0'
+        ], 'fill-opacity', 1, 'fill-outline-color', 'black');
+        map.setFilter('tdsb-highlight', ['==', ['get', 'SCH_NAME'], '']);
+    
+        let popups = document.getElementsByClassName('mapboxgl-popup');
+        if (popups.length) {
+            for (let i = popups.length - 1; i >= 0; i--) {
+                popups[i].remove();
+            }
+        }
+        console.clear();
+    });
 });
 
 
@@ -211,35 +374,6 @@ document.getElementById('returnbutton').addEventListener('click', () => {
 /*--------------------------------------------------------------------
 LEGEND
 --------------------------------------------------------------------*/
-
-
-
-/*--------------------------------------------------------------------
-LAYER TOGGLES
---------------------------------------------------------------------*/
-document.getElementById('deselectHoods').addEventListener('click', function () {
-    map.setPaintProperty('EoATIndex', 'fill-color', [
-        'interpolate',
-        ['linear'],
-        ['get', 'Index'],
-        0, '#CA0020',
-        2957.08, '#F4A582',
-        3589.27, '#F7F7F7',
-        4303.43, '#92C5DE',
-        5685.18, '#0571B0'
-    ], 'fill-opacity', 1, 'fill-outline-color', 'black');
-    map.setFilter('tdsb-highlight', ['==', ['get', 'SCH_NAME'], '']);
-
-    let popups = document.getElementsByClassName('mapboxgl-popup');
-    if (popups.length) {
-        for (let i = popups.length - 1; i >= 0; i--) {
-            popups[i].remove();
-        }
-    }
-    console.clear();
-});
-
-
 
 /*--------------------------------------------------------------------
 GIS ANALYSIS - Schools Inside of a given Census Tract
@@ -381,14 +515,6 @@ document.getElementById('shareCheck').addEventListener('change', (e) => {
     );
 });
 
-document.getElementById('indexCheck').addEventListener('change', (e) => {
-    map.setLayoutProperty(
-        'EoATIndex',
-        'visibility',
-        e.target.checked ? 'visible' : 'none'
-    );
-});
-
 document.getElementById('schoolCheck').addEventListener('change', (e) => {
     map.setLayoutProperty(
         'tdsb-schools',
@@ -400,6 +526,14 @@ document.getElementById('schoolCheck').addEventListener('change', (e) => {
 document.getElementById('schoolCheck').addEventListener('change', (e) => {
     map.setLayoutProperty(
         'tdsb-highlight',
+        'visibility',
+        e.target.checked ? 'visible' : 'none'
+    );
+});
+
+document.getElementById('indexCheck').addEventListener('change', (e) => {
+    map.setLayoutProperty(
+        'EoATIndex',
         'visibility',
         e.target.checked ? 'visible' : 'none'
     );
