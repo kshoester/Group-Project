@@ -11,7 +11,7 @@
     position: relative;
     font: 14px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
     background: rgba(255, 255, 255, 0.8);
-    top: 520px;
+    top: 480px;
     left: 0;
     width: 250px;
     margin: 10px 0 0 10px;
@@ -89,7 +89,7 @@
     width: 250px;
     position: absolute;
     z-index: 9999;
-    top: 60px;
+    top: 100px;
     left: 10px;
     overflow-x: hidden;
     background-color: white;
