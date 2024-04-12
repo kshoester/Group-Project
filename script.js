@@ -51,33 +51,6 @@ fetch('https://raw.githubusercontent.com/kshoester/Group-Project/main/data/tdsb-
 DATA VISUALIZATION
 --------------------------------------------------------------------*/
 map.on('load', () => {
-    // neighbourhood crime rates --> 2019 bike thefts
-    map.addSource('crime-rates-data', {
-        type: 'geojson',
-        data: 'https://raw.githubusercontent.com/kshoester/group-project/main/data/neighbourhood-crime-rates.geojson' // Update link if necessary
-    });
-    // map.addLayer({
-    //     'id': 'crime-rates',
-    //     'type': 'fill',
-    //     'source': 'crime-rates-data',
-    //     'paint': {
-    //         'fill-color': [
-    //             'interpolate',
-    //             ['linear'],
-    //             ['get', 'BIKETHEFT_2019'],
-    //             0, '#FFF7EC',
-    //             36, '#FEE1BA',
-    //             72, '#FDC38D',
-    //             108, '#FC8D59',
-    //             144, '#E7533A',
-    //             180, '#BF100A',
-    //             216, '#7F0000'
-    //         ],
-    //         'fill-opacity': 0.5,
-    //         'fill-outline-color': 'black'
-    //     },
-    // });
-
     // bike paths
     map.addSource('cycling-network-data', {
         type: 'geojson',
@@ -132,110 +105,43 @@ map.on('load', () => {
         'filter': ['in', ['get', 'SCH_NAME'], '']
     });
 
-    // pedestrian collisions (2019)
-    map.addSource('pedcyc-collisions-data', {
-        type: 'geojson',
-        data: collisionsgeojson
-    });
+    //Ease of Active Transit Index
     map.addLayer({
-        'id': 'ped-collisions',
-        'type': 'circle',
-        'source': 'pedcyc-collisions-data',
-        'paint': {
-            'circle-radius': [
-                "interpolate",
-                ["linear"],
-                ["zoom"],
-                10, 1,
-                15, 10
-            ],
-            'circle-color': 'red'
-        },
-        'filter': ['all',
-            ['==', ['get', 'IMPACTYPE'], 'Pedestrian Collisions'],
-            ['==', ['get', 'YEAR'], 2019]],
-    });
-
-    // cyclist collisions (2019)
-    map.addLayer({
-        'id': 'cyc-collisions',
-        'type': 'circle',
-        'source': 'pedcyc-collisions-data',
-        'paint': {
-            'circle-radius': [
-                "interpolate",
-                ["linear"],
-                ["zoom"],
-                10, 1,
-                15, 10
-            ],
-            'circle-color': 'purple'
-        },
-        'filter': ['all',
-            ['==', ['get', 'IMPACTYPE'], 'Cyclist Collisions'],
-            ['==', ['get', 'YEAR'], 2019]],
-    });
-
-    // Ease of Active Transit Index (EoATI)
-    map.addSource('EoATIndexData', {
-        type: 'geojson',
-        data: 'https://raw.githubusercontent.com/kshoester/Group-Project/main/data/EoATIndex.geojson'
-    });
-    
-    map.addLayer({
-        'id': 'crime-rates',
+        'id': 'EoATIndex',
         'type': 'fill',
-        'source': 'EoATIndexData',
+        'source': {
+            'type': 'vector',
+            'url': 'mapbox://altaylor37.1d0tv2v1'
+            },
+        'source-layer': 'EoATIndex-b99mhm',
         'paint': {
             'fill-color': [
                 'interpolate',
                 ['linear'],
-                ['get', 'BIKETHEFT_2019'],
-                0, '#FFF7EC',
-                36, '#FEE1BA',
-                72, '#FDC38D',
-                108, '#FC8D59',
-                144, '#E7533A',
-                180, '#BF100A',
-                216, '#7F0000'
+                ['get', 'Index'],
+                0, '#CA0020',
+                2957.08, '#F4A582',
+                3589.27, '#F7F7F7',
+                4303.43, '#92C5DE',
+                5685.18, '#0571B0'
             ],
             'fill-opacity': 0.5,
             'fill-outline-color': 'black'
-        },
+        } 
     });
 
     document.getElementById('opacity-slider').addEventListener('input', function (e) {
         let layerOpacity = e.target.value;
-        map.setPaintProperty('crime-rates', 'fill-opacity', parseFloat(layerOpacity));
+        map.setPaintProperty('EoATIndex', 'fill-opacity', parseFloat(layerOpacity));
     });
 });
+
+
 
 
 /*--------------------------------------------------------------------
 INTERACTIVITY EVENTS
 --------------------------------------------------------------------*/
-// dropdown selection of schools
-// let tdsbvalue;
-
-// document.getElementById("tdsbfieldset").addEventListener('change',(e) => {   
-//     tdsbvalue = document.getElementById('school').value;
-
-//     console.log(tdsbvalue); 
-
-//     if (tdsbvalue == 'All') {
-//         map.setFilter(
-//             'tdsb-schools',
-//             ['has', '_id'] 
-//         );
-//     } else {
-//         map.setFilter(
-//             'tdsb-schools',
-//             ['==', ['get', 'SCH_NAME'], tdsbvalue] 
-//         );
-//     }
-
-// });
-
 // dropdown selection of schools by municipality
 let munivalue;
 
@@ -258,7 +164,6 @@ document.getElementById("munifieldset").addEventListener('change', (e) => {
 
 });
 
-
 // return to full extent
 document.getElementById('returnbutton').addEventListener('click', () => {
     map.flyTo({
@@ -280,17 +185,15 @@ LEGEND
 LAYER TOGGLES
 --------------------------------------------------------------------*/
 document.getElementById('deselectHoods').addEventListener('click', function () {
-    map.setPaintProperty('crime-rates', 'fill-color', [
+    map.setPaintProperty('EoATIndex', 'fill-color', [
         'interpolate',
         ['linear'],
-        ['get', 'BIKETHEFT_2019'],
-        0, '#FFF7EC',
-        36, '#FEE1BA',
-        72, '#FDC38D',
-        108, '#FC8D59',
-        144, '#E7533A',
-        180, '#BF100A',
-        216, '#7F0000'
+        ['get', 'Index'],
+        0, '#CA0020',
+        2957.08, '#F4A582',
+        3589.27, '#F7F7F7',
+        4303.43, '#92C5DE',
+        5685.18, '#0571B0'
     ], 'fill-opacity', 1, 'fill-outline-color', 'black');
     map.setFilter('tdsb-highlight', ['==', ['get', 'SCH_NAME'], '']);
 
@@ -332,12 +235,12 @@ GIS ANALYSIS - Schools Inside of a given Census Tract
             'Ease of Active Transit Index'.
 --------------------------------------------------------------------*/
 
-map.on('click', 'crime-rates', function (e) {
+map.on('click', 'EoATIndex', function (e) {
     let selectedCT = e.features[0];
-    let hoodID = e.features[0].properties._id;
+    let hoodID = e.features[0].properties._id1;
 
-    map.setPaintProperty('crime-rates', 'fill-color', [
-        'match', ['get', '_id'], hoodID, '#f00', '#fff'
+    map.setPaintProperty('EoATIndex', 'fill-color', [
+        'match', ['get', '_id1'], hoodID, '#f00', '#fff'
     ]);
 
     let schoolsInCT = [];
@@ -355,8 +258,7 @@ map.on('click', 'crime-rates', function (e) {
         map.setFilter('tdsb-highlight', ['==', ['get', 'SCH_NAME'], '']);
     }
 
-    let popupContent = `<strong>Census Tract:</strong> ${selectedCT.properties.AREA_NAME}
-        <br><strong>Bike Thefts (2019):</strong> ${selectedCT.properties.BIKETHEFT_2019}
+    let popupContent = `<strong>Census Tract:</strong> ${selectedCT.properties.AREA_NA2}
         <br><strong>Schools:</strong> ${schoolsInCT.join(', ')}`;
     new mapboxgl.Popup()
         .setLngLat(e.lngLat)
