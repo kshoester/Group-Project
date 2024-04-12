@@ -301,7 +301,7 @@ GIS ANALYSIS - Schools Inside of a given Census Tract
     LIMITS: Census tract boundaries are, to some extent, arbitrary and
             do not take into account the ways of life or just being on
             the edge of a tract. Additionally, see the limits to the 
-            'Ease of Active Transportation Index'.
+            'Ease of Active Transit Index'.
 --------------------------------------------------------------------*/
 
 map.on('click', 'crime-rates', function (e) {
@@ -394,6 +394,7 @@ geocoder.on('result', function (ev) {
     let queryResult = ev.result.geometry;
     let nearestBikeStation = turf.nearestPoint(queryResult, bikeShareStations);
     let stationName = nearestBikeStation.properties.name;
+    let stationCapacity = nearestBikeStation.properties.capacity;
 
     //Remove the markers / popups when the user changes the geocode address.
     if (nearestStationMarker) nearestStationMarker.remove();
@@ -406,7 +407,7 @@ geocoder.on('result', function (ev) {
     nearestStationPopup = new mapboxgl.Popup({
         closeButton: false
     })
-        .setHTML('<h4>Nearest bikeshare station: </h4><p>' + stationName + '</p>')
+        .setHTML('<h4>Nearest bikeshare station: </h4><p>' + stationName + '</p>' + '<h4>Bikeshare station capacity: </h4><p>' + stationCapacity + '</p>')
 
     //Zoom map to nearest bike station on address input
     map.flyTo({
