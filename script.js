@@ -1,3 +1,4 @@
+
 /*--------------------------------------------------------------------
 INITIALIZE MAP
 --------------------------------------------------------------------*/
@@ -6,8 +7,8 @@ mapboxgl.accessToken = 'pk.eyJ1Ijoia3Nob2VzdGVyIiwiYSI6ImNsdG9jOXN3djBoMnYyaW1zY
 const map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/kshoester/cltsd7k7400ct01qs61u02utn', // monochrome style with toronto CTs
-    center: [-79.39, 43.66],
-    zoom: 12,
+    center: [-79.39, 43.69],
+    zoom: 11,
 });
 /*--------------------------------------------------------------------
 MAP CONTROLS
@@ -345,8 +346,8 @@ document.getElementById("munifieldset").addEventListener('change', (e) => {
 // return to full extent
 document.getElementById('returnbutton').addEventListener('click', () => {
     map.flyTo({
-        center: [-79.3832, 43.6532],
-        zoom: 12,
+        center: [-79.39, 43.69],
+        zoom: 11,
         essential: true
     });
 });
